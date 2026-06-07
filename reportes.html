@@ -1,1 +1,243 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Reportes | Flores Mobiliario</title><link rel="stylesheet" href="css/estilos.css"></head><body><header class="topbar"><div class="container nav"><a class="brand" href="index.html"><img src="logo.png" alt="Logo"><span>Flores Mobiliario</span></a><nav class="links"><a href="index.html">Inicio</a><a href="productos.html">Productos</a><a href="cotizacion.html" data-user>Cotización</a><a href="perfil.html" data-user>Mi cuenta</a><a href="admin.html" data-admin>Panel admin</a><a href="contacto.html">Contacto</a></nav><div class="nav-actions"><a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a><a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a><button class="btn btn-outline btn-small" onclick="logout()" data-auth>Salir</button><button id="mobileMenu" class="btn btn-small mobile-menu">☰</button></div></div></header><main class="section"><div class="container"><span class="pill">Indicadores</span><h1 class="section-title">Reportes</h1><div class="grid grid-4"><div class="card card-pad"><p class="mini">Total aceptado</p><h2 id="repVentas">$0.00</h2></div><div class="card card-pad"><p class="mini">Cotizaciones enviadas</p><h2 id="repCot">0</h2></div><div class="card card-pad"><p class="mini">Productos registrados</p><h2 id="repProd">0</h2></div><div class="card card-pad"><p class="mini">Stock total</p><h2 id="repStock">0</h2></div></div><a class="btn btn-outline" style="margin-top:22px" href="admin.html">Volver al panel</a></div></main><footer class="footer"><div class="container footer-grid"><div><h2>Flores Mobiliario</h2><p>Muebles profesionales para oficinas, recepciones y espacios comerciales. Catálogo, cotizaciones y administración con LocalStorage.</p></div><div><h3>Cuenta admin</h3><p>admin@flores.com<br>admin123</p></div><div><h3>Atención</h3><p>Genera tu cotización, revisa el total y espera la aceptación del administrador.</p></div></div></footer><div id="toast" class="toast"></div><script src="js/app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reportes | Flores Mobiliario</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="Logo Flores Mobiliario">
+        <span>Flores Mobiliario</span>
+      </a>
+
+      <nav class="links" id="navLinks">
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="cotizacion.html" data-user>Cotización</a>
+        <a href="perfil.html" data-user>Mi cuenta</a>
+        <a href="admin.html" data-admin>Panel admin</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a>
+        <a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a>
+        <button class="btn btn-outline btn-small" type="button" onclick="logout()" data-auth>Salir</button>
+        <button id="mobileMenu" class="btn btn-small mobile-menu" type="button">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+
+      <div class="report-header">
+        <div>
+          <span class="pill">Indicadores administrativos</span>
+          <h1 class="section-title">Reportes del sistema</h1>
+          <p class="section-lead">
+            Consulta métricas de productos, inventario y cotizaciones guardadas en LocalStorage.
+          </p>
+        </div>
+
+        <a class="btn btn-outline" href="admin.html">
+          Volver al panel
+        </a>
+      </div>
+
+      <div class="grid grid-4 report-cards">
+        <div class="card card-pad report-card">
+          <p class="mini">Total aceptado</p>
+          <h2 id="repVentas">$0.00</h2>
+          <small>Cotizaciones aceptadas</small>
+        </div>
+
+        <div class="card card-pad report-card">
+          <p class="mini">Cotizaciones enviadas</p>
+          <h2 id="repCot">0</h2>
+          <small>Total de solicitudes</small>
+        </div>
+
+        <div class="card card-pad report-card">
+          <p class="mini">Productos registrados</p>
+          <h2 id="repProd">0</h2>
+          <small>Muebles en catálogo</small>
+        </div>
+
+        <div class="card card-pad report-card">
+          <p class="mini">Stock total</p>
+          <h2 id="repStock">0</h2>
+          <small>Unidades disponibles</small>
+        </div>
+      </div>
+
+      <section class="section">
+        <div class="grid grid-2">
+          <article class="card card-pad">
+            <h2>Estado de cotizaciones</h2>
+            <div id="estadoCotizaciones" class="report-list"></div>
+          </article>
+
+          <article class="card card-pad">
+            <h2>Inventario por categoría</h2>
+            <div id="inventarioCategorias" class="report-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-header">
+          <div>
+            <span class="pill">Últimas solicitudes</span>
+            <h2>Cotizaciones recientes</h2>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="quote-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="tablaReportes"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <h2>Flores Mobiliario</h2>
+        <p>Muebles profesionales para oficinas, recepciones y espacios comerciales.</p>
+      </div>
+
+      <div>
+        <h3>Cuenta admin</h3>
+        <p>admin@flores.com<br>admin123</p>
+      </div>
+
+      <div>
+        <h3>Atención</h3>
+        <p>Genera tu cotización, revisa el total y espera la respuesta del administrador.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/app.js"></script>
+
+  <script>
+    const session = JSON.parse(localStorage.getItem("fm_session"));
+
+    if (!session || session.rol !== "admin") {
+      window.location.href = "login.html";
+    }
+
+    const products = JSON.parse(localStorage.getItem("fm_products")) || [];
+    const quotes = JSON.parse(localStorage.getItem("fm_quotes")) || [];
+
+    function money(value) {
+      return Number(value).toLocaleString("es-MX", {
+        style: "currency",
+        currency: "MXN"
+      });
+    }
+
+    const aceptadas = quotes.filter(q => q.estado === "Aceptada");
+
+    const totalAceptado = aceptadas.reduce(
+      (acc, q) => acc + Number(q.total || 0),
+      0
+    );
+
+    const stockTotal = products.reduce(
+      (acc, p) => acc + Number(p.stock || 0),
+      0
+    );
+
+    document.getElementById("repVentas").textContent = money(totalAceptado);
+    document.getElementById("repCot").textContent = quotes.length;
+    document.getElementById("repProd").textContent = products.length;
+    document.getElementById("repStock").textContent = stockTotal;
+
+    const estados = {
+      Pendiente: quotes.filter(q => q.estado === "Pendiente").length,
+      Aceptada: quotes.filter(q => q.estado === "Aceptada").length,
+      Rechazada: quotes.filter(q => q.estado === "Rechazada").length
+    };
+
+    const estadoContainer = document.getElementById("estadoCotizaciones");
+
+    estadoContainer.innerHTML = Object.entries(estados).map(([estado, total]) => `
+      <div class="report-row">
+        <span>${estado}</span>
+        <b>${total}</b>
+      </div>
+    `).join("");
+
+    const categorias = {};
+
+    products.forEach(product => {
+      categorias[product.categoria] =
+        (categorias[product.categoria] || 0) + Number(product.stock || 0);
+    });
+
+    const categoriasContainer = document.getElementById("inventarioCategorias");
+
+    if (Object.keys(categorias).length === 0) {
+      categoriasContainer.innerHTML = `
+        <p class="mini">No hay productos registrados.</p>
+      `;
+    } else {
+      categoriasContainer.innerHTML = Object.entries(categorias).map(([cat, total]) => `
+        <div class="report-row">
+          <span>${cat}</span>
+          <b>${total}</b>
+        </div>
+      `).join("");
+    }
+
+    const tabla = document.getElementById("tablaReportes");
+
+    if (quotes.length === 0) {
+      tabla.innerHTML = `
+        <tr>
+          <td colspan="5" class="empty">
+            No hay cotizaciones registradas.
+          </td>
+        </tr>
+      `;
+    } else {
+      [...quotes].reverse().slice(0, 10).forEach(q => {
+        tabla.innerHTML += `
+          <tr>
+            <td>#${q.id}</td>
+            <td>${q.usuario || "Cliente"}</td>
+            <td>${q.fecha || "Sin fecha"}</td>
+            <td>
+              <span class="status ${q.estado.toLowerCase()}">
+                ${q.estado}
+              </span>
+            </td>
+            <td>${money(q.total || 0)}</td>
+          </tr>
+        `;
+      });
+    }
+  </script>
+</body>
+</html>
