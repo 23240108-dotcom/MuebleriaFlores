@@ -1,1 +1,178 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Contacto | Flores Mobiliario</title><link rel="stylesheet" href="css/estilos.css"></head><body><header class="topbar"><div class="container nav"><a class="brand" href="index.html"><img src="logo.png" alt="Logo"><span>Flores Mobiliario</span></a><nav class="links"><a href="index.html">Inicio</a><a href="productos.html">Productos</a><a href="cotizacion.html" data-user>Cotización</a><a href="perfil.html" data-user>Mi cuenta</a><a href="admin.html" data-admin>Panel admin</a><a href="contacto.html">Contacto</a></nav><div class="nav-actions"><a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a><a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a><button class="btn btn-outline btn-small" onclick="logout()" data-auth>Salir</button><button id="mobileMenu" class="btn btn-small mobile-menu">☰</button></div></div></header><main class="section"><div class="container grid grid-2"><div><span class="pill">Contacto</span><h1 class="section-title">Cotiza mobiliario para tu espacio</h1><p class="section-lead">Este formulario es visual. Para generar una cotización real en LocalStorage, entra al catálogo, agrega productos y envía tu solicitud.</p><div class="notice ok">La información se conserva en el navegador donde se usa la página.</div></div><form class="card card-pad" onsubmit="event.preventDefault();toast('Mensaje registrado visualmente')"><div class="form-row"><label>Nombre</label><input class="input" required></div><div class="form-row"><label>Correo</label><input type="email" class="input" required></div><div class="form-row"><label>Mensaje</label><textarea rows="5" required></textarea></div><button class="btn btn-primary" style="margin-top:14px">Enviar mensaje</button></form></div></main><footer class="footer"><div class="container footer-grid"><div><h2>Flores Mobiliario</h2><p>Muebles profesionales para oficinas, recepciones y espacios comerciales. Catálogo, cotizaciones y administración con LocalStorage.</p></div><div><h3>Cuenta admin</h3><p>admin@flores.com<br>admin123</p></div><div><h3>Atención</h3><p>Genera tu cotización, revisa el total y espera la aceptación del administrador.</p></div></div></footer><div id="toast" class="toast"></div><script src="js/app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contacto | Flores Mobiliario</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="Logo Flores Mobiliario">
+        <span>Flores Mobiliario</span>
+      </a>
+
+      <nav class="links" id="navLinks">
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="cotizacion.html" data-user>Cotización</a>
+        <a href="perfil.html" data-user>Mi cuenta</a>
+        <a href="admin.html" data-admin>Panel admin</a>
+        <a href="contacto.html" class="active">Contacto</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a>
+        <a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a>
+        <button class="btn btn-outline btn-small" type="button" onclick="logout()" data-auth>Salir</button>
+        <button id="mobileMenu" class="btn btn-small mobile-menu" type="button">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container grid grid-2">
+      <section>
+        <span class="pill">Contacto</span>
+        <h1 class="section-title">Cotiza mobiliario para tu espacio</h1>
+
+        <p class="section-lead">
+          Escríbenos para recibir orientación sobre muebles para oficina, recepción,
+          salas de espera o espacios comerciales.
+        </p>
+
+        <div class="notice ok">
+          Para generar una cotización real, inicia sesión, entra al catálogo,
+          agrega productos y envía tu solicitud desde la sección de cotización.
+        </div>
+
+        <div class="contact-cards">
+          <article class="card card-pad">
+            <h3>Atención personalizada</h3>
+            <p>Te ayudamos a elegir muebles según medidas, estilo, presupuesto y disponibilidad.</p>
+          </article>
+
+          <article class="card card-pad">
+            <h3>Cotizaciones</h3>
+            <p>El administrador puede revisar, aceptar, modificar o eliminar cotizaciones solicitadas.</p>
+          </article>
+
+          <article class="card card-pad">
+            <h3>LocalStorage</h3>
+            <p>Los datos se conservan en el navegador donde se utiliza el sistema.</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <form id="contactForm" class="card card-pad">
+          <h2>Enviar mensaje</h2>
+
+          <div class="form-row">
+            <label>Nombre</label>
+            <input name="nombre" class="input" required>
+          </div>
+
+          <div class="form-row">
+            <label>Correo</label>
+            <input name="correo" type="email" class="input" required>
+          </div>
+
+          <div class="form-row">
+            <label>Teléfono</label>
+            <input name="telefono" class="input" required>
+          </div>
+
+          <div class="form-row">
+            <label>Asunto</label>
+            <select name="asunto" class="input" required>
+              <option value="">Selecciona una opción</option>
+              <option>Cotización de muebles</option>
+              <option>Disponibilidad de producto</option>
+              <option>Modificación de cotización</option>
+              <option>Soporte de cuenta</option>
+              <option>Otro</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label>Mensaje</label>
+            <textarea name="mensaje" rows="5" class="input" required></textarea>
+          </div>
+
+          <button class="btn btn-primary" type="submit">
+            Enviar mensaje
+          </button>
+
+          <p class="mini">
+            Este mensaje se guarda localmente en el navegador para consulta administrativa.
+          </p>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <h2>Flores Mobiliario</h2>
+        <p>
+          Muebles profesionales para oficinas, recepciones y espacios comerciales.
+        </p>
+      </div>
+
+      <div>
+        <h3>Cuenta admin</h3>
+        <p>admin@flores.com<br>admin123</p>
+      </div>
+
+      <div>
+        <h3>Atención</h3>
+        <p>
+          Genera tu cotización, revisa el total y espera la respuesta del administrador.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/app.js"></script>
+  <script>
+    const contactForm = document.getElementById("contactForm");
+
+    if (contactForm) {
+      contactForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const data = Object.fromEntries(new FormData(contactForm).entries());
+
+        const mensajes = JSON.parse(localStorage.getItem("fm_mensajes") || "[]");
+
+        mensajes.push({
+          id: Date.now(),
+          nombre: data.nombre,
+          correo: data.correo,
+          telefono: data.telefono,
+          asunto: data.asunto,
+          mensaje: data.mensaje,
+          fecha: new Date().toLocaleString("es-MX")
+        });
+
+        localStorage.setItem("fm_mensajes", JSON.stringify(mensajes));
+
+        if (typeof toast === "function") {
+          toast("Mensaje guardado correctamente");
+        } else {
+          alert("Mensaje guardado correctamente");
+        }
+
+        contactForm.reset();
+      });
+    }
+  </script>
+</body>
+</html>
