@@ -1,1 +1,141 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Login | Flores Mobiliario</title><link rel="stylesheet" href="css/estilos.css"></head><body><header class="topbar"><div class="container nav"><a class="brand" href="index.html"><img src="logo.png" alt="Logo"><span>Flores Mobiliario</span></a><nav class="links"><a href="index.html">Inicio</a><a href="productos.html">Productos</a><a href="cotizacion.html" data-user>Cotización</a><a href="perfil.html" data-user>Mi cuenta</a><a href="admin.html" data-admin>Panel admin</a><a href="contacto.html">Contacto</a></nav><div class="nav-actions"><a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a><a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a><button class="btn btn-outline btn-small" onclick="logout()" data-auth>Salir</button><button id="mobileMenu" class="btn btn-small mobile-menu">☰</button></div></div></header><main class="section"><div class="container grid grid-2"><div><span class="pill">Acceso</span><h1 class="section-title">Inicia sesión</h1><p class="section-lead">Entra como cliente para cotizar o como administrador para gestionar productos y solicitudes.</p><div class="notice"><b>Admin de prueba:</b><br>admin@flores.com / admin123</div></div><form id="loginForm" class="card card-pad"><div class="form-row"><label>Correo</label><input name="correo" type="email" class="input" required></div><div class="form-row" style="margin-top:12px"><label>Contraseña</label><input name="password" type="password" class="input" required></div><button class="btn btn-primary" style="margin-top:18px;width:100%">Entrar</button><p class="mini">¿No tienes cuenta? <a href="registro.html"><b>Regístrate</b></a></p><p class="mini">¿Eres administrador nuevo? <a href="registro-admin.html"><b>Registrar admin</b></a></p></form></div></main><footer class="footer"><div class="container footer-grid"><div><h2>Flores Mobiliario</h2><p>Muebles profesionales para oficinas, recepciones y espacios comerciales. Catálogo, cotizaciones y administración con LocalStorage.</p></div><div><h3>Cuenta admin</h3><p>admin@flores.com<br>admin123</p></div><div><h3>Atención</h3><p>Genera tu cotización, revisa el total y espera la aceptación del administrador.</p></div></div></footer><div id="toast" class="toast"></div><script src="js/app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar sesión | Flores Mobiliario</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="Logo Flores Mobiliario">
+        <span>Flores Mobiliario</span>
+      </a>
+
+      <nav class="links" id="navLinks">
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="cotizacion.html" data-user>Cotización</a>
+        <a href="perfil.html" data-user>Mi cuenta</a>
+        <a href="admin.html" data-admin>Panel admin</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-outline btn-small active" href="login.html" data-guest>Ingresar</a>
+        <a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a>
+        <button class="btn btn-outline btn-small" type="button" onclick="logout()" data-auth>Salir</button>
+        <button id="mobileMenu" class="btn btn-small mobile-menu" type="button">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="section login-section">
+    <div class="container grid grid-2 login-layout">
+
+      <section class="login-info">
+        <span class="pill">Acceso seguro</span>
+
+        <h1 class="section-title">
+          Inicia sesión en Flores Mobiliario
+        </h1>
+
+        <p class="section-lead">
+          Entra como cliente para buscar muebles y solicitar cotizaciones,
+          o como administrador para gestionar productos, usuarios y solicitudes.
+        </p>
+
+        <div class="login-benefits">
+          <div class="benefit-card">
+            <h3>Clientes</h3>
+            <p>Consulta muebles, genera cotizaciones y revisa el estado de tus solicitudes.</p>
+          </div>
+
+          <div class="benefit-card">
+            <h3>Administradores</h3>
+            <p>Administra muebles, modifica cotizaciones y controla la información del sistema.</p>
+          </div>
+        </div>
+
+        <div class="notice">
+          <b>Admin de prueba:</b><br>
+          admin@flores.com / admin123
+        </div>
+      </section>
+
+      <section>
+        <form id="loginForm" class="card card-pad login-card">
+
+          <h2>Entrar al sistema</h2>
+
+          <div class="form-row">
+            <label>Correo electrónico</label>
+            <input
+              name="correo"
+              type="email"
+              class="input"
+              placeholder="ejemplo@correo.com"
+              required>
+          </div>
+
+          <div class="form-row">
+            <label>Contraseña</label>
+            <input
+              name="password"
+              type="password"
+              class="input"
+              placeholder="Ingresa tu contraseña"
+              required>
+          </div>
+
+          <button class="btn btn-primary btn-full" type="submit">
+            Iniciar sesión
+          </button>
+
+          <p class="mini">
+            ¿No tienes cuenta?
+            <a href="registro.html"><b>Regístrate como cliente</b></a>
+          </p>
+
+          <p class="mini">
+            ¿Eres administrador nuevo?
+            <a href="registro-admin.html"><b>Registrar administrador</b></a>
+          </p>
+
+        </form>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <h2>Flores Mobiliario</h2>
+        <p>
+          Muebles profesionales para oficinas, recepciones y espacios comerciales.
+        </p>
+      </div>
+
+      <div>
+        <h3>Cuenta admin</h3>
+        <p>admin@flores.com<br>admin123</p>
+      </div>
+
+      <div>
+        <h3>Atención</h3>
+        <p>
+          Genera tu cotización, revisa el total y espera la respuesta del administrador.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
