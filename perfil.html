@@ -1,1 +1,435 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Perfil | Flores Mobiliario</title><link rel="stylesheet" href="css/estilos.css"></head><body><header class="topbar"><div class="container nav"><a class="brand" href="index.html"><img src="logo.png" alt="Logo"><span>Flores Mobiliario</span></a><nav class="links"><a href="index.html">Inicio</a><a href="productos.html">Productos</a><a href="cotizacion.html" data-user>Cotización</a><a href="perfil.html" data-user>Mi cuenta</a><a href="admin.html" data-admin>Panel admin</a><a href="contacto.html">Contacto</a></nav><div class="nav-actions"><a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a><a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a><button class="btn btn-outline btn-small" onclick="logout()" data-auth>Salir</button><button id="mobileMenu" class="btn btn-small mobile-menu">☰</button></div></div></header><main class="section"><div class="container grid grid-2"><div><span class="pill">Mi cuenta</span><h1 class="section-title">Datos del usuario</h1><p class="section-lead">Actualiza tus datos guardados en LocalStorage o elimina tu cuenta definitivamente.</p><button id="deleteAccount" class="btn btn-danger">Eliminar mi cuenta</button></div><form id="perfilForm" class="card card-pad"><div class="form-grid"><div class="form-row"><label>Nombre</label><input name="nombre" class="input" required></div><div class="form-row"><label>Apellidos</label><input name="apellidos" class="input" required></div><div class="form-row"><label>Correo</label><input name="correo" type="email" class="input" required></div><div class="form-row"><label>Teléfono</label><input name="telefono" class="input" required></div><div class="form-row" style="grid-column:1/-1"><label>Contraseña</label><input name="password" class="input" required></div></div><button class="btn btn-primary" style="margin-top:18px">Guardar cambios</button></form></div><div class="container section"><h2>Historial de cotizaciones</h2><div id="misCotizaciones" class="grid"></div></div></main><footer class="footer"><div class="container footer-grid"><div><h2>Flores Mobiliario</h2><p>Muebles profesionales para oficinas, recepciones y espacios comerciales. Catálogo, cotizaciones y administración con LocalStorage.</p></div><div><h3>Cuenta admin</h3><p>admin@flores.com<br>admin123</p></div><div><h3>Atención</h3><p>Genera tu cotización, revisa el total y espera la aceptación del administrador.</p></div></div></footer><div id="toast" class="toast"></div><script src="js/app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi perfil | Flores Mobiliario</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+
+  <header class="topbar">
+
+    <div class="container nav">
+
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="Logo Flores Mobiliario">
+        <span>Flores Mobiliario</span>
+      </a>
+
+      <nav class="links" id="navLinks">
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="cotizacion.html" data-user>Cotización</a>
+        <a href="perfil.html" class="active" data-user>Mi cuenta</a>
+        <a href="admin.html" data-admin>Panel admin</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+
+      <div class="nav-actions">
+
+        <a class="btn btn-outline btn-small"
+          href="login.html"
+          data-guest>
+          Ingresar
+        </a>
+
+        <a class="btn btn-primary btn-small"
+          href="registro.html"
+          data-guest>
+          Registrarse
+        </a>
+
+        <button class="btn btn-outline btn-small"
+          onclick="logout()"
+          data-auth>
+          Salir
+        </button>
+
+        <button id="mobileMenu"
+          class="btn btn-small mobile-menu"
+          type="button">
+          ☰
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+  <main class="section">
+
+    <div class="container">
+
+      <div class="profile-header">
+
+        <div>
+
+          <span class="pill">
+            Mi cuenta
+          </span>
+
+          <h1 class="section-title">
+            Perfil del usuario
+          </h1>
+
+          <p class="section-lead">
+            Actualiza tu información personal,
+            revisa tus cotizaciones y administra tu cuenta.
+          </p>
+
+        </div>
+
+        <button id="deleteAccount"
+          class="btn btn-danger">
+          Eliminar mi cuenta
+        </button>
+
+      </div>
+
+      <div class="grid grid-2 profile-layout">
+
+        <!-- FORMULARIO -->
+        <section>
+
+          <form id="perfilForm"
+            class="card card-pad profile-card">
+
+            <h2>Información personal</h2>
+
+            <div class="form-grid">
+
+              <div class="form-row">
+                <label>Nombre</label>
+
+                <input
+                  name="nombre"
+                  class="input"
+                  required>
+              </div>
+
+              <div class="form-row">
+                <label>Apellidos</label>
+
+                <input
+                  name="apellidos"
+                  class="input"
+                  required>
+              </div>
+
+              <div class="form-row">
+                <label>Correo electrónico</label>
+
+                <input
+                  name="correo"
+                  type="email"
+                  class="input"
+                  required>
+              </div>
+
+              <div class="form-row">
+                <label>Teléfono</label>
+
+                <input
+                  name="telefono"
+                  class="input"
+                  required>
+              </div>
+
+              <div class="form-row full">
+                <label>Contraseña</label>
+
+                <input
+                  name="password"
+                  type="password"
+                  class="input"
+                  required>
+              </div>
+
+            </div>
+
+            <button class="btn btn-primary"
+              style="margin-top:20px">
+              Guardar cambios
+            </button>
+
+          </form>
+
+        </section>
+
+        <!-- RESUMEN -->
+        <aside class="card card-pad profile-summary">
+
+          <div class="profile-avatar">
+            👤
+          </div>
+
+          <h2 id="profileName">
+            Usuario
+          </h2>
+
+          <p class="mini">
+            Cliente registrado en Flores Mobiliario
+          </p>
+
+          <div class="profile-stats">
+
+            <div class="stat-box">
+              <small>Cotizaciones</small>
+              <h3 id="profileQuotes">0</h3>
+            </div>
+
+            <div class="stat-box">
+              <small>Estado</small>
+              <h3>Activo</h3>
+            </div>
+
+          </div>
+
+          <div class="notice ok">
+            Tus datos se guardan localmente
+            mediante LocalStorage.
+          </div>
+
+        </aside>
+
+      </div>
+
+      <!-- HISTORIAL -->
+      <section class="section">
+
+        <div class="section-header">
+
+          <div>
+            <span class="pill">Historial</span>
+            <h2>Mis cotizaciones</h2>
+          </div>
+
+        </div>
+
+        <div id="misCotizaciones"
+          class="grid quotes-grid">
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+
+    <div class="container footer-grid">
+
+      <div>
+        <h2>Flores Mobiliario</h2>
+
+        <p>
+          Muebles profesionales para oficinas,
+          recepciones y espacios comerciales.
+        </p>
+      </div>
+
+      <div>
+        <h3>Cuenta admin</h3>
+
+        <p>
+          admin@flores.com
+          <br>
+          admin123
+        </p>
+      </div>
+
+      <div>
+        <h3>Atención</h3>
+
+        <p>
+          Genera tu cotización,
+          revisa el total y espera
+          la respuesta del administrador.
+        </p>
+      </div>
+
+    </div>
+
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/app.js"></script>
+
+  <script>
+
+    const user =
+      JSON.parse(localStorage.getItem("fm_session"));
+
+    if (!user) {
+      window.location.href = "login.html";
+    }
+
+    const form =
+      document.getElementById("perfilForm");
+
+    form.nombre.value = user.nombre || "";
+    form.apellidos.value = user.apellidos || "";
+    form.correo.value = user.correo || "";
+    form.telefono.value = user.telefono || "";
+    form.password.value = user.password || "";
+
+    document.getElementById("profileName")
+      .textContent =
+      `${user.nombre} ${user.apellidos}`;
+
+    form.addEventListener("submit", e => {
+
+      e.preventDefault();
+
+      const users =
+        JSON.parse(localStorage.getItem("fm_users")) || [];
+
+      const index =
+        users.findIndex(
+          u => u.correo === user.correo
+        );
+
+      const updatedUser = {
+        ...users[index],
+        nombre: form.nombre.value,
+        apellidos: form.apellidos.value,
+        correo: form.correo.value,
+        telefono: form.telefono.value,
+        password: form.password.value
+      };
+
+      users[index] = updatedUser;
+
+      localStorage.setItem(
+        "fm_users",
+        JSON.stringify(users)
+      );
+
+      localStorage.setItem(
+        "fm_session",
+        JSON.stringify(updatedUser)
+      );
+
+      toast("Datos actualizados");
+
+    });
+
+    document
+      .getElementById("deleteAccount")
+      .addEventListener("click", () => {
+
+        if (!confirm(
+          "¿Seguro que deseas eliminar tu cuenta?"
+        )) return;
+
+        let users =
+          JSON.parse(localStorage.getItem("fm_users")) || [];
+
+        users =
+          users.filter(
+            u => u.correo !== user.correo
+          );
+
+        localStorage.setItem(
+          "fm_users",
+          JSON.stringify(users)
+        );
+
+        localStorage.removeItem("fm_session");
+
+        toast("Cuenta eliminada");
+
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1200);
+
+      });
+
+    // COTIZACIONES
+
+    const quotes =
+      JSON.parse(localStorage.getItem("fm_quotes")) || [];
+
+    const myQuotes =
+      quotes.filter(
+        q => q.correo === user.correo
+      );
+
+    document.getElementById("profileQuotes")
+      .textContent = myQuotes.length;
+
+    const container =
+      document.getElementById("misCotizaciones");
+
+    if (myQuotes.length === 0) {
+
+      container.innerHTML = `
+        <div class="card card-pad">
+          No tienes cotizaciones registradas.
+        </div>
+      `;
+
+    } else {
+
+      myQuotes.reverse().forEach(q => {
+
+        container.innerHTML += `
+          <article class="card card-pad quote-card">
+
+            <div class="quote-top">
+
+              <div>
+                <h3>Cotización #${q.id}</h3>
+                <small>${q.fecha}</small>
+              </div>
+
+              <span class="status ${q.estado.toLowerCase()}">
+                ${q.estado}
+              </span>
+
+            </div>
+
+            <div class="quote-products">
+
+              ${q.productos.map(p => `
+                <div class="quote-item">
+
+                  <img src="${p.img}">
+
+                  <div>
+                    <b>${p.nombre}</b>
+                    <small>
+                      ${p.cantidad} x $${p.precio}
+                    </small>
+                  </div>
+
+                </div>
+              `).join("")}
+
+            </div>
+
+            <div class="quote-bottom">
+
+              <div>
+                <small>Total</small>
+                <h3>$${q.total.toFixed(2)}</h3>
+              </div>
+
+            </div>
+
+          </article>
+        `;
+      });
+
+    }
+
+  </script>
+
+</body>
+</html>
