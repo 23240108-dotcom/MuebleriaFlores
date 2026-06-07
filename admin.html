@@ -1,1 +1,243 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Admin | Flores Mobiliario</title><link rel="stylesheet" href="css/estilos.css"></head><body><header class="topbar"><div class="container nav"><a class="brand" href="index.html"><img src="logo.png" alt="Logo"><span>Flores Mobiliario</span></a><nav class="links"><a href="index.html">Inicio</a><a href="productos.html">Productos</a><a href="cotizacion.html" data-user>Cotización</a><a href="perfil.html" data-user>Mi cuenta</a><a href="admin.html" data-admin>Panel admin</a><a href="contacto.html">Contacto</a></nav><div class="nav-actions"><a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a><a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a><button class="btn btn-outline btn-small" onclick="logout()" data-auth>Salir</button><button id="mobileMenu" class="btn btn-small mobile-menu">☰</button></div></div></header><main id="adminPage" class="section"><div class="container"><span class="pill">Panel administrativo</span><h1 class="section-title">Administración Flores Mobiliario</h1><div class="admin-layout"><aside class="side"><a data-go="productos" onclick="adminTab('productos')">Productos</a><a data-go="cotizaciones" onclick="adminTab('cotizaciones')">Cotizaciones</a><a data-go="adminDatos" onclick="adminTab('adminDatos')">Datos admin</a><a data-go="respaldo" onclick="adminTab('respaldo')">Respaldo</a><a href="reportes.html">Reportes</a></aside><section><div data-panel="productos"><div class="card card-pad"><h2>Agregar o editar producto</h2><form id="productForm"><input type="hidden" name="id"><div class="form-grid"><div class="form-row"><label>Nombre</label><input name="nombre" class="input" required></div><div class="form-row"><label>Categoría</label><input name="categoria" class="input" required></div><div class="form-row"><label>Color</label><input name="color" class="input" required></div><div class="form-row"><label>Medida</label><input name="medida" class="input" required></div><div class="form-row"><label>Precio</label><input name="precio" type="number" class="input" required></div><div class="form-row"><label>Stock</label><input name="stock" type="number" class="input" required></div><div class="form-row"><label>Imagen</label><select name="img"><option>silla.jpg</option><option>escritorio.jpg</option><option>librero.jpeg</option><option>mesa.jpeg</option><option>recepcion.jpeg</option><option>archivero.jpg</option><option>banner.jpg</option></select></div><div class="form-row" style="grid-column:1/-1"><label>Descripción</label><textarea name="descripcion" rows="3" required></textarea></div></div><button class="btn btn-primary" style="margin-top:14px">Guardar producto</button><button type="button" class="btn btn-outline" onclick="clearProduct()">Limpiar</button></form></div><div class="table-wrap" style="margin-top:22px"><table><thead><tr><th>Imagen</th><th>Producto</th><th>Precio</th><th>Stock</th><th>Acciones</th></tr></thead><tbody id="adminProducts"></tbody></table></div></div><div data-panel="cotizaciones" style="display:none"><h2>Cotizaciones de usuarios</h2><p class="section-lead">Puedes aceptar, eliminar o aplicar cambios de cantidades a una cotización si el cliente lo pide.</p><div id="adminQuotes" class="grid"></div></div><div data-panel="adminDatos" style="display:none"><form id="adminForm" class="card card-pad"><h2>Datos del administrador</h2><div class="form-grid"><div class="form-row"><label>Nombre</label><input name="nombre" class="input"></div><div class="form-row"><label>Apellidos</label><input name="apellidos" class="input"></div><div class="form-row"><label>Correo</label><input name="correo" type="email" class="input"></div><div class="form-row"><label>Teléfono</label><input name="telefono" class="input"></div><div class="form-row"><label>Rol</label><input name="rol" class="input"></div><div class="form-row"><label>Contraseña</label><input name="password" class="input"></div></div><button class="btn btn-primary" style="margin-top:14px">Guardar datos</button> <button type="button" id="deleteAdmin" class="btn btn-danger" style="margin-top:14px">Eliminar mi cuenta admin</button><p class="mini">La eliminación pide confirmación de la dueña.</p></form></div><div data-panel="respaldo" style="display:none"><div class="card card-pad"><h2>Respaldo de información</h2><p class="section-lead">Exporta o importa una copia JSON de LocalStorage para cumplir el respaldo de información del sistema.</p><button class="btn btn-primary" onclick="exportBackup()">Descargar respaldo JSON</button><label class="btn btn-outline" style="margin-left:8px">Importar respaldo<input type="file" accept="application/json" style="display:none" onchange="importBackup(this.files[0])"></label></div></div></section></div></div></main><footer class="footer"><div class="container footer-grid"><div><h2>Flores Mobiliario</h2><p>Muebles profesionales para oficinas, recepciones y espacios comerciales. Catálogo, cotizaciones y administración con LocalStorage.</p></div><div><h3>Cuenta admin</h3><p>admin@flores.com<br>admin123</p></div><div><h3>Atención</h3><p>Genera tu cotización, revisa el total y espera la aceptación del administrador.</p></div></div></footer><div id="toast" class="toast"></div><script src="js/app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel Administrativo | Flores Mobiliario</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="Logo Flores Mobiliario">
+        <span>Flores Mobiliario</span>
+      </a>
+
+      <nav class="links" id="navLinks">
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="cotizacion.html" data-user>Cotización</a>
+        <a href="perfil.html" data-user>Mi cuenta</a>
+        <a href="admin.html" data-admin>Panel admin</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a>
+        <a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a>
+        <button class="btn btn-outline btn-small" type="button" onclick="logout()" data-auth>Salir</button>
+        <button id="mobileMenu" class="btn btn-small mobile-menu" type="button">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="adminPage" class="section">
+    <div class="container">
+      <span class="pill">Panel administrativo</span>
+      <h1 class="section-title">Administración Flores Mobiliario</h1>
+      <p class="section-lead">
+        Gestiona muebles, cotizaciones, datos del administrador y respaldos del sistema.
+      </p>
+
+      <div class="admin-layout">
+        <aside class="side">
+          <button type="button" data-go="productos" onclick="adminTab('productos')">Productos</button>
+          <button type="button" data-go="cotizaciones" onclick="adminTab('cotizaciones')">Cotizaciones</button>
+          <button type="button" data-go="adminDatos" onclick="adminTab('adminDatos')">Datos admin</button>
+          <button type="button" data-go="respaldo" onclick="adminTab('respaldo')">Respaldo</button>
+          <a href="reportes.html">Reportes</a>
+        </aside>
+
+        <section class="admin-content">
+
+          <div data-panel="productos">
+            <div class="card card-pad">
+              <h2>Agregar o editar producto</h2>
+
+              <form id="productForm">
+                <input type="hidden" name="id">
+
+                <div class="form-grid">
+                  <div class="form-row">
+                    <label>Nombre</label>
+                    <input name="nombre" class="input" required>
+                  </div>
+
+                  <div class="form-row">
+                    <label>Categoría</label>
+                    <input name="categoria" class="input" required>
+                  </div>
+
+                  <div class="form-row">
+                    <label>Color</label>
+                    <input name="color" class="input" required>
+                  </div>
+
+                  <div class="form-row">
+                    <label>Medida</label>
+                    <input name="medida" class="input" required>
+                  </div>
+
+                  <div class="form-row">
+                    <label>Precio</label>
+                    <input name="precio" type="number" min="1" step="0.01" class="input" required>
+                  </div>
+
+                  <div class="form-row">
+                    <label>Stock</label>
+                    <input name="stock" type="number" min="0" class="input" required>
+                  </div>
+
+                  <div class="form-row">
+                    <label>Imagen</label>
+                    <select name="img" class="input" required>
+                      <option value="silla.jpg">Silla</option>
+                      <option value="escritorio.jpg">Escritorio</option>
+                      <option value="librero.jpeg">Librero</option>
+                      <option value="mesa.jpeg">Mesa</option>
+                      <option value="recepcion.jpeg">Recepción</option>
+                      <option value="archivero.jpg">Archivero</option>
+                      <option value="banner.jpg">Banner</option>
+                    </select>
+                  </div>
+
+                  <div class="form-row full">
+                    <label>Descripción</label>
+                    <textarea name="descripcion" rows="3" class="input" required></textarea>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button class="btn btn-primary" type="submit">Guardar producto</button>
+                  <button class="btn btn-outline" type="button" onclick="clearProduct()">Limpiar</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Imagen</th>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="adminProducts"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div data-panel="cotizaciones" style="display:none">
+            <h2>Cotizaciones de usuarios</h2>
+            <p class="section-lead">
+              Consulta, acepta, modifica o elimina cotizaciones generadas por los clientes.
+            </p>
+            <div id="adminQuotes" class="grid"></div>
+          </div>
+
+          <div data-panel="adminDatos" style="display:none">
+            <form id="adminForm" class="card card-pad">
+              <h2>Datos del administrador</h2>
+
+              <div class="form-grid">
+                <div class="form-row">
+                  <label>Nombre</label>
+                  <input name="nombre" class="input" required>
+                </div>
+
+                <div class="form-row">
+                  <label>Apellidos</label>
+                  <input name="apellidos" class="input" required>
+                </div>
+
+                <div class="form-row">
+                  <label>Correo</label>
+                  <input name="correo" type="email" class="input" required>
+                </div>
+
+                <div class="form-row">
+                  <label>Teléfono</label>
+                  <input name="telefono" class="input" required>
+                </div>
+
+                <div class="form-row">
+                  <label>Rol</label>
+                  <input name="rol" class="input" required>
+                </div>
+
+                <div class="form-row">
+                  <label>Contraseña</label>
+                  <input name="password" type="password" class="input" required>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button class="btn btn-primary" type="submit">Guardar datos</button>
+                <button type="button" id="deleteAdmin" class="btn btn-danger">
+                  Eliminar mi cuenta admin
+                </button>
+              </div>
+
+              <p class="mini">
+                La eliminación requiere confirmación de la dueña.
+              </p>
+            </form>
+          </div>
+
+          <div data-panel="respaldo" style="display:none">
+            <div class="card card-pad">
+              <h2>Respaldo de información</h2>
+              <p class="section-lead">
+                Exporta o importa una copia JSON de LocalStorage para evitar pérdida de información.
+              </p>
+
+              <button class="btn btn-primary" type="button" onclick="exportBackup()">
+                Descargar respaldo JSON
+              </button>
+
+              <label class="btn btn-outline">
+                Importar respaldo
+                <input type="file" accept="application/json" hidden onchange="importBackup(this.files[0])">
+              </label>
+            </div>
+          </div>
+
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <h2>Flores Mobiliario</h2>
+        <p>
+          Muebles profesionales para oficinas, recepciones y espacios comerciales.
+        </p>
+      </div>
+
+      <div>
+        <h3>Cuenta admin</h3>
+        <p>admin@flores.com<br>admin123</p>
+      </div>
+
+      <div>
+        <h3>Atención</h3>
+        <p>
+          Revisa cotizaciones generadas por clientes y administra el inventario.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
