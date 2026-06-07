@@ -1,4 +1,42 @@
+function toast(message){
 
+  const toast = document.getElementById("toast");
+
+  if(!toast) return;
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  setTimeout(()=>{
+    toast.classList.remove("show");
+  },3000);
+
+}
+
+function logout(){
+
+  localStorage.removeItem("fm_session");
+
+  window.location.href = "login.html";
+
+}
+
+const mobileMenu =
+  document.getElementById("mobileMenu");
+
+const navLinks =
+  document.getElementById("navLinks");
+
+if(mobileMenu){
+
+  mobileMenu.addEventListener("click",()=>{
+
+    navLinks.classList.toggle("active");
+
+  });
+
+}
 const LS={users:'fm_users_v3',admins:'fm_admins_v3',products:'fm_products_v3',quotes:'fm_quotes_v3',session:'fm_session_v3',activeQuote:'fm_active_quote_v3'};
 const money=n=>Number(n||0).toLocaleString('es-MX',{style:'currency',currency:'MXN'});
 const qs=s=>document.querySelector(s); const qsa=s=>[...document.querySelectorAll(s)];
