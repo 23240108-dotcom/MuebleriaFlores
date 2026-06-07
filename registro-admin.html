@@ -1,1 +1,324 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Registro administrador | Flores Mobiliario</title><link rel="stylesheet" href="css/estilos.css"></head><body><header class="topbar"><div class="container nav"><a class="brand" href="index.html"><img src="logo.png" alt="Logo"><span>Flores Mobiliario</span></a><nav class="links"><a href="index.html">Inicio</a><a href="productos.html">Productos</a><a href="cotizacion.html" data-user>Cotización</a><a href="perfil.html" data-user>Mi cuenta</a><a href="admin.html" data-admin>Panel admin</a><a href="contacto.html">Contacto</a></nav><div class="nav-actions"><a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a><a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a><button class="btn btn-outline btn-small" onclick="logout()" data-auth>Salir</button><button id="mobileMenu" class="btn btn-small mobile-menu">☰</button></div></div></header><main class="section"><div class="container grid grid-2"><div><span class="pill">RF8 · Registro del Administrador</span><h1 class="section-title">Crear cuenta de administrador</h1><p class="section-lead">Registra administradores para gestionar muebles, cotizaciones y datos del sistema. Para control interno, solicita una clave de autorización.</p><div class="notice"><b>Clave de autorización:</b> DUENA-FLORES</div></div><form id="adminRegisterForm" class="card card-pad"><div class="form-grid"><div class="form-row"><label>Nombre</label><input name="nombre" class="input" required></div><div class="form-row"><label>Apellidos</label><input name="apellidos" class="input" required></div><div class="form-row"><label>Correo</label><input name="correo" type="email" class="input" required></div><div class="form-row"><label>Teléfono</label><input name="telefono" class="input" required></div><div class="form-row"><label>Rol</label><input name="rol" class="input" value="Administrador"></div><div class="form-row"><label>Clave de autorización</label><input name="clave" class="input" required></div><div class="form-row" style="grid-column:1/-1"><label>Contraseña</label><input name="password" type="password" class="input" required minlength="4"></div></div><button class="btn btn-primary" style="margin-top:18px;width:100%">Registrar administrador</button><p class="mini">¿Ya tienes cuenta administrativa? <a href="login.html"><b>Inicia sesión</b></a></p></form></div></main><footer class="footer"><div class="container footer-grid"><div><h2>Flores Mobiliario</h2><p>Muebles profesionales para oficinas, recepciones y espacios comerciales. Sistema de catálogo, cotizaciones y administración con LocalStorage.</p></div><div><h3>Cuenta admin inicial</h3><p>admin@flores.com<br>admin123</p></div><div><h3>Funciones RF</h3><p>Usuarios, administradores, muebles, cotizaciones, edición, eliminación y respaldo local.</p></div></div></footer><div id="toast" class="toast"></div><script src="js/app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registro administrador | Flores Mobiliario</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+
+  <header class="topbar">
+
+    <div class="container nav">
+
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="Logo Flores Mobiliario">
+        <span>Flores Mobiliario</span>
+      </a>
+
+      <nav class="links" id="navLinks">
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="cotizacion.html" data-user>Cotización</a>
+        <a href="perfil.html" data-user>Mi cuenta</a>
+        <a href="admin.html" data-admin>Panel admin</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+
+      <div class="nav-actions">
+
+        <a class="btn btn-outline btn-small"
+          href="login.html"
+          data-guest>
+          Ingresar
+        </a>
+
+        <a class="btn btn-primary btn-small active"
+          href="registro.html"
+          data-guest>
+          Registrarse
+        </a>
+
+        <button class="btn btn-outline btn-small"
+          onclick="logout()"
+          data-auth>
+          Salir
+        </button>
+
+        <button id="mobileMenu"
+          class="btn btn-small mobile-menu"
+          type="button">
+          ☰
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+  <main class="section">
+
+    <div class="container grid grid-2 register-layout">
+
+      <!-- INFO -->
+      <section>
+
+        <span class="pill">
+          RF8 · Registro del Administrador
+        </span>
+
+        <h1 class="section-title">
+          Crear cuenta administrativa
+        </h1>
+
+        <p class="section-lead">
+          Registra administradores autorizados para gestionar
+          muebles, cotizaciones, usuarios y respaldo del sistema.
+        </p>
+
+        <div class="register-benefits">
+
+          <article class="benefit-card">
+            <h3>Gestión de muebles</h3>
+
+            <p>
+              Agrega, modifica y elimina productos del catálogo.
+            </p>
+          </article>
+
+          <article class="benefit-card">
+            <h3>Control de cotizaciones</h3>
+
+            <p>
+              Revisa, acepta o modifica solicitudes de clientes.
+            </p>
+          </article>
+
+          <article class="benefit-card">
+            <h3>Control administrativo</h3>
+
+            <p>
+              Administra usuarios y respaldos mediante LocalStorage.
+            </p>
+          </article>
+
+        </div>
+
+        <div class="notice">
+          <b>Clave de autorización:</b>
+          DUENA-FLORES
+        </div>
+
+      </section>
+
+      <!-- FORM -->
+      <section>
+
+        <form id="adminRegisterForm"
+          class="card card-pad register-card">
+
+          <h2>Registrar administrador</h2>
+
+          <div class="form-grid">
+
+            <div class="form-row">
+              <label>Nombre</label>
+
+              <input
+                name="nombre"
+                class="input"
+                required>
+            </div>
+
+            <div class="form-row">
+              <label>Apellidos</label>
+
+              <input
+                name="apellidos"
+                class="input"
+                required>
+            </div>
+
+            <div class="form-row">
+              <label>Correo electrónico</label>
+
+              <input
+                name="correo"
+                type="email"
+                class="input"
+                required>
+            </div>
+
+            <div class="form-row">
+              <label>Teléfono</label>
+
+              <input
+                name="telefono"
+                class="input"
+                required>
+            </div>
+
+            <div class="form-row">
+              <label>Rol</label>
+
+              <input
+                name="rol"
+                class="input"
+                value="Administrador"
+                readonly>
+            </div>
+
+            <div class="form-row">
+              <label>Clave de autorización</label>
+
+              <input
+                name="clave"
+                class="input"
+                placeholder="Clave interna"
+                required>
+            </div>
+
+            <div class="form-row full">
+              <label>Contraseña</label>
+
+              <input
+                name="password"
+                type="password"
+                class="input"
+                minlength="4"
+                required>
+            </div>
+
+          </div>
+
+          <button class="btn btn-primary btn-full"
+            style="margin-top:20px">
+            Registrar administrador
+          </button>
+
+          <p class="mini">
+            ¿Ya tienes cuenta administrativa?
+            <a href="login.html">
+              <b>Inicia sesión</b>
+            </a>
+          </p>
+
+        </form>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+
+    <div class="container footer-grid">
+
+      <div>
+        <h2>Flores Mobiliario</h2>
+
+        <p>
+          Muebles profesionales para oficinas,
+          recepciones y espacios comerciales.
+        </p>
+      </div>
+
+      <div>
+        <h3>Cuenta admin inicial</h3>
+
+        <p>
+          admin@flores.com
+          <br>
+          admin123
+        </p>
+      </div>
+
+      <div>
+        <h3>Funciones RF</h3>
+
+        <p>
+          Usuarios, administradores,
+          muebles, cotizaciones,
+          edición, eliminación
+          y respaldo local.
+        </p>
+      </div>
+
+    </div>
+
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/app.js"></script>
+
+  <script>
+
+    const adminForm =
+      document.getElementById("adminRegisterForm");
+
+    adminForm.addEventListener("submit", e => {
+
+      e.preventDefault();
+
+      const data =
+        Object.fromEntries(
+          new FormData(adminForm).entries()
+        );
+
+      if (data.clave !== "DUENA-FLORES") {
+
+        toast("Clave de autorización incorrecta");
+
+        return;
+      }
+
+      const admins =
+        JSON.parse(localStorage.getItem("fm_admins")) || [];
+
+      const exists =
+        admins.find(
+          a => a.correo === data.correo
+        );
+
+      if (exists) {
+
+        toast("El administrador ya existe");
+
+        return;
+      }
+
+      const newAdmin = {
+        id: Date.now(),
+        nombre: data.nombre,
+        apellidos: data.apellidos,
+        correo: data.correo,
+        telefono: data.telefono,
+        password: data.password,
+        rol: "admin"
+      };
+
+      admins.push(newAdmin);
+
+      localStorage.setItem(
+        "fm_admins",
+        JSON.stringify(admins)
+      );
+
+      toast("Administrador registrado");
+
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1200);
+
+    });
+
+  </script>
+
+</body>
+</html>
