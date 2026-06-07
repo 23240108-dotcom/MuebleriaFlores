@@ -1,1 +1,301 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Productos | Flores Mobiliario</title><link rel="stylesheet" href="css/estilos.css"></head><body><header class="topbar"><div class="container nav"><a class="brand" href="index.html"><img src="logo.png" alt="Logo"><span>Flores Mobiliario</span></a><nav class="links"><a href="index.html">Inicio</a><a href="productos.html">Productos</a><a href="cotizacion.html" data-user>Cotización</a><a href="perfil.html" data-user>Mi cuenta</a><a href="admin.html" data-admin>Panel admin</a><a href="contacto.html">Contacto</a></nav><div class="nav-actions"><a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a><a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a><button class="btn btn-outline btn-small" onclick="logout()" data-auth>Salir</button><button id="mobileMenu" class="btn btn-small mobile-menu">☰</button></div></div></header><main class="section"><div class="container"><span class="pill">Catálogo profesional</span><h1 class="section-title">Productos para oficina y comercio</h1><p class="section-lead">Selecciona muebles, filtra por categoría y agrégalos a tu cotización. Para cotizar necesitas iniciar sesión como usuario.</p><div class="filters"><input id="buscar" class="input" placeholder="Buscar por nombre, categoría o color"><select id="categoria"></select><select id="orden"><option value="">Orden recomendado</option><option value="menor">Precio menor</option><option value="mayor">Precio mayor</option></select></div><div id="productosGrid" class="grid grid-3"></div></div></main><footer class="footer"><div class="container footer-grid"><div><h2>Flores Mobiliario</h2><p>Muebles profesionales para oficinas, recepciones y espacios comerciales. Catálogo, cotizaciones y administración con LocalStorage.</p></div><div><h3>Cuenta admin</h3><p>admin@flores.com<br>admin123</p></div><div><h3>Atención</h3><p>Genera tu cotización, revisa el total y espera la aceptación del administrador.</p></div></div></footer><div id="toast" class="toast"></div><script src="js/app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Productos | Flores Mobiliario</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="Logo Flores Mobiliario">
+        <span>Flores Mobiliario</span>
+      </a>
+
+      <nav class="links" id="navLinks">
+        <a href="index.html">Inicio</a>
+        <a href="productos.html" class="active">Productos</a>
+        <a href="cotizacion.html" data-user>Cotización</a>
+        <a href="perfil.html" data-user>Mi cuenta</a>
+        <a href="admin.html" data-admin>Panel admin</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a>
+        <a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a>
+        <button class="btn btn-outline btn-small" type="button" onclick="logout()" data-auth>Salir</button>
+        <button id="mobileMenu" class="btn btn-small mobile-menu" type="button">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+
+      <div class="catalog-header">
+        <div>
+          <span class="pill">Catálogo profesional</span>
+          <h1 class="section-title">Muebles para oficina y comercio</h1>
+          <p class="section-lead">
+            Explora productos, filtra por categoría, consulta disponibilidad
+            y agrega muebles a tu cotización.
+          </p>
+        </div>
+
+        <a href="cotizacion.html" class="btn btn-primary" data-user>
+          Ver cotización
+        </a>
+      </div>
+
+      <div class="catalog-toolbar card card-pad">
+        <div class="filters">
+          <input
+            id="buscar"
+            class="input"
+            placeholder="Buscar por nombre, categoría, color o descripción">
+
+          <select id="categoria" class="input">
+            <option value="">Todas las categorías</option>
+          </select>
+
+          <select id="orden" class="input">
+            <option value="">Orden recomendado</option>
+            <option value="menor">Precio menor</option>
+            <option value="mayor">Precio mayor</option>
+            <option value="az">Nombre A-Z</option>
+            <option value="stock">Mayor stock</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="catalog-info">
+        <p>
+          Productos encontrados:
+          <b id="productCount">0</b>
+        </p>
+      </div>
+
+      <div id="productosGrid" class="grid grid-3 products-grid"></div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <h2>Flores Mobiliario</h2>
+        <p>
+          Muebles profesionales para oficinas, recepciones y espacios comerciales.
+        </p>
+      </div>
+
+      <div>
+        <h3>Cuenta admin</h3>
+        <p>admin@flores.com<br>admin123</p>
+      </div>
+
+      <div>
+        <h3>Atención</h3>
+        <p>
+          Genera tu cotización, revisa el total y espera la respuesta del administrador.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/app.js"></script>
+
+  <script>
+    const productosGrid = document.getElementById("productosGrid");
+    const buscar = document.getElementById("buscar");
+    const categoria = document.getElementById("categoria");
+    const orden = document.getElementById("orden");
+    const productCount = document.getElementById("productCount");
+
+    function getProducts() {
+      return JSON.parse(localStorage.getItem("fm_products")) || [];
+    }
+
+    function money(value) {
+      return Number(value).toLocaleString("es-MX", {
+        style: "currency",
+        currency: "MXN"
+      });
+    }
+
+    function loadCategories() {
+      const products = getProducts();
+
+      const categories = [
+        ...new Set(products.map(p => p.categoria).filter(Boolean))
+      ];
+
+      categoria.innerHTML = `<option value="">Todas las categorías</option>`;
+
+      categories.forEach(cat => {
+        categoria.innerHTML += `
+          <option value="${cat}">
+            ${cat}
+          </option>
+        `;
+      });
+    }
+
+    function renderProducts() {
+      let products = getProducts();
+
+      const text = buscar.value.toLowerCase().trim();
+      const selectedCategory = categoria.value;
+
+      if (text) {
+        products = products.filter(p =>
+          p.nombre.toLowerCase().includes(text) ||
+          p.categoria.toLowerCase().includes(text) ||
+          p.color.toLowerCase().includes(text) ||
+          p.descripcion.toLowerCase().includes(text)
+        );
+      }
+
+      if (selectedCategory) {
+        products = products.filter(
+          p => p.categoria === selectedCategory
+        );
+      }
+
+      if (orden.value === "menor") {
+        products.sort((a, b) => a.precio - b.precio);
+      }
+
+      if (orden.value === "mayor") {
+        products.sort((a, b) => b.precio - a.precio);
+      }
+
+      if (orden.value === "az") {
+        products.sort((a, b) => a.nombre.localeCompare(b.nombre));
+      }
+
+      if (orden.value === "stock") {
+        products.sort((a, b) => b.stock - a.stock);
+      }
+
+      productCount.textContent = products.length;
+      productosGrid.innerHTML = "";
+
+      if (products.length === 0) {
+        productosGrid.innerHTML = `
+          <div class="card card-pad">
+            No se encontraron productos.
+          </div>
+        `;
+        return;
+      }
+
+      products.forEach(product => {
+        const disponible = product.stock > 0;
+
+        productosGrid.innerHTML += `
+          <article class="card product-card">
+
+            <div class="product-img-wrap">
+              <img src="${product.img}" alt="${product.nombre}">
+              <span class="product-badge">
+                ${product.categoria}
+              </span>
+            </div>
+
+            <div class="product-content">
+              <h3>${product.nombre}</h3>
+
+              <p>${product.descripcion}</p>
+
+              <div class="product-meta">
+                <span>Color: <b>${product.color}</b></span>
+                <span>Medida: <b>${product.medida}</b></span>
+              </div>
+
+              <div class="product-bottom">
+                <div>
+                  <small>Precio</small>
+                  <h3>${money(product.precio)}</h3>
+                </div>
+
+                <span class="stock ${disponible ? "ok" : "bad"}">
+                  ${disponible ? product.stock + " disponibles" : "Sin stock"}
+                </span>
+              </div>
+
+              <button
+                class="btn btn-primary btn-full"
+                ${disponible ? "" : "disabled"}
+                onclick="addToQuote(${product.id})">
+                Agregar a cotización
+              </button>
+            </div>
+
+          </article>
+        `;
+      });
+    }
+
+    function addToQuote(id) {
+      const session = JSON.parse(localStorage.getItem("fm_session"));
+
+      if (!session || session.rol !== "cliente") {
+        toast("Debes iniciar sesión como cliente para cotizar");
+        window.location.href = "login.html";
+        return;
+      }
+
+      const products = getProducts();
+      const product = products.find(p => p.id === id);
+
+      if (!product || product.stock <= 0) {
+        toast("Producto no disponible");
+        return;
+      }
+
+      const carrito =
+        JSON.parse(localStorage.getItem("fm_carrito")) || [];
+
+      const existing = carrito.find(item => item.id === product.id);
+
+      if (existing) {
+        if (existing.cantidad >= product.stock) {
+          toast("No puedes agregar más del stock disponible");
+          return;
+        }
+
+        existing.cantidad += 1;
+      } else {
+        carrito.push({
+          id: product.id,
+          nombre: product.nombre,
+          categoria: product.categoria,
+          color: product.color,
+          medida: product.medida,
+          precio: Number(product.precio),
+          img: product.img,
+          cantidad: 1
+        });
+      }
+
+      localStorage.setItem("fm_carrito", JSON.stringify(carrito));
+
+      toast("Producto agregado a cotización");
+    }
+
+    buscar.addEventListener("input", renderProducts);
+    categoria.addEventListener("change", renderProducts);
+    orden.addEventListener("change", renderProducts);
+
+    loadCategories();
+    renderProducts();
+  </script>
+</body>
+</html>
