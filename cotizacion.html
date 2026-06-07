@@ -1,1 +1,474 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cotización | Flores Mobiliario</title><link rel="stylesheet" href="css/estilos.css"></head><body><header class="topbar"><div class="container nav"><a class="brand" href="index.html"><img src="logo.png" alt="Logo"><span>Flores Mobiliario</span></a><nav class="links"><a href="index.html">Inicio</a><a href="productos.html">Productos</a><a href="cotizacion.html" data-user>Cotización</a><a href="perfil.html" data-user>Mi cuenta</a><a href="admin.html" data-admin>Panel admin</a><a href="contacto.html">Contacto</a></nav><div class="nav-actions"><a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a><a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a><button class="btn btn-outline btn-small" onclick="logout()" data-auth>Salir</button><button id="mobileMenu" class="btn btn-small mobile-menu">☰</button></div></div></header><main class="section"><div class="container"><span class="pill">Cotización completa</span><h1 class="section-title">Tu cotización</h1><p class="section-lead">Revisa productos seleccionados, cantidades, subtotales y total general. También puedes eliminar productos antes de enviarla.</p><div class="grid grid-2" style="align-items:start"><div class="table-wrap"><table><thead><tr><th>Producto</th><th>Precio</th><th>Cantidad</th><th>Subtotal</th><th></th></tr></thead><tbody id="quoteBody"></tbody></table></div><aside class="card card-pad summary"><h2>Resumen</h2><p class="mini">Productos seleccionados: <b id="quoteProductos">0</b></p><p class="mini">Cantidad total: <b id="quoteCantidad">0</b></p><h2 id="quoteTotal">$0.00</h2><div class="form-row"><label>Notas para el administrador</label><textarea id="quoteNotas" rows="4" placeholder="Ejemplo: necesito entrega urgente, cambio de color o ajuste de cantidad."></textarea></div><button id="submitQuote" class="btn btn-primary" style="width:100%;margin-top:14px">Enviar cotización</button><a href="productos.html" class="btn btn-outline" style="width:100%;margin-top:10px">Seguir comprando</a></aside></div><section class="section"><h2>Mis cotizaciones enviadas</h2><div id="misCotizaciones" class="grid"></div></section></div></main><footer class="footer"><div class="container footer-grid"><div><h2>Flores Mobiliario</h2><p>Muebles profesionales para oficinas, recepciones y espacios comerciales. Catálogo, cotizaciones y administración con LocalStorage.</p></div><div><h3>Cuenta admin</h3><p>admin@flores.com<br>admin123</p></div><div><h3>Atención</h3><p>Genera tu cotización, revisa el total y espera la aceptación del administrador.</p></div></div></footer><div id="toast" class="toast"></div><script src="js/app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cotización | Flores Mobiliario</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+
+  <header class="topbar">
+    <div class="container nav">
+
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="Logo Flores Mobiliario">
+        <span>Flores Mobiliario</span>
+      </a>
+
+      <nav class="links" id="navLinks">
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="cotizacion.html" class="active" data-user>Cotización</a>
+        <a href="perfil.html" data-user>Mi cuenta</a>
+        <a href="admin.html" data-admin>Panel admin</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a>
+
+        <a class="btn btn-primary btn-small" href="registro.html" data-guest>
+          Registrarse
+        </a>
+
+        <button class="btn btn-outline btn-small"
+          onclick="logout()"
+          data-auth>
+          Salir
+        </button>
+
+        <button id="mobileMenu"
+          class="btn btn-small mobile-menu"
+          type="button">
+          ☰
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="section">
+
+    <div class="container">
+
+      <span class="pill">Cotización completa</span>
+
+      <h1 class="section-title">
+        Tu cotización
+      </h1>
+
+      <p class="section-lead">
+        Revisa productos seleccionados, cantidades,
+        subtotales y total general.
+      </p>
+
+      <div class="grid grid-2 quote-layout">
+
+        <!-- TABLA -->
+        <section>
+
+          <div class="table-wrap">
+
+            <table class="quote-table">
+
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Precio</th>
+                  <th>Cantidad</th>
+                  <th>Subtotal</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody id="quoteBody"></tbody>
+
+            </table>
+
+          </div>
+
+        </section>
+
+        <!-- RESUMEN -->
+        <aside class="card card-pad summary-card">
+
+          <h2>Resumen</h2>
+
+          <div class="summary-item">
+            <span>Productos seleccionados</span>
+            <b id="quoteProductos">0</b>
+          </div>
+
+          <div class="summary-item">
+            <span>Cantidad total</span>
+            <b id="quoteCantidad">0</b>
+          </div>
+
+          <div class="summary-total">
+            <small>Total general</small>
+            <h2 id="quoteTotal">$0.00</h2>
+          </div>
+
+          <div class="form-row">
+            <label>Notas para el administrador</label>
+
+            <textarea
+              id="quoteNotas"
+              rows="4"
+              class="input"
+              placeholder="Ejemplo: necesito cambio de color, entrega urgente o modificación de cantidades."
+            ></textarea>
+          </div>
+
+          <button id="submitQuote"
+            class="btn btn-primary btn-full">
+            Enviar cotización
+          </button>
+
+          <a href="productos.html"
+            class="btn btn-outline btn-full">
+            Seguir comprando
+          </a>
+
+        </aside>
+
+      </div>
+
+      <!-- HISTORIAL -->
+      <section class="section">
+
+        <div class="section-header">
+          <div>
+            <span class="pill">Historial</span>
+            <h2>Mis cotizaciones enviadas</h2>
+          </div>
+        </div>
+
+        <div id="misCotizaciones" class="grid quotes-grid"></div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+
+    <div class="container footer-grid">
+
+      <div>
+        <h2>Flores Mobiliario</h2>
+
+        <p>
+          Muebles profesionales para oficinas,
+          recepciones y espacios comerciales.
+        </p>
+      </div>
+
+      <div>
+        <h3>Cuenta admin</h3>
+
+        <p>
+          admin@flores.com
+          <br>
+          admin123
+        </p>
+      </div>
+
+      <div>
+        <h3>Atención</h3>
+
+        <p>
+          Genera tu cotización,
+          revisa el total y espera
+          la respuesta del administrador.
+        </p>
+      </div>
+
+    </div>
+
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/app.js"></script>
+
+  <script>
+
+    const quoteBody = document.getElementById("quoteBody");
+    const quoteProductos = document.getElementById("quoteProductos");
+    const quoteCantidad = document.getElementById("quoteCantidad");
+    const quoteTotal = document.getElementById("quoteTotal");
+
+    function loadQuote() {
+
+      const carrito =
+        JSON.parse(localStorage.getItem("fm_carrito")) || [];
+
+      quoteBody.innerHTML = "";
+
+      let total = 0;
+      let cantidadTotal = 0;
+
+      if (carrito.length === 0) {
+
+        quoteBody.innerHTML = `
+          <tr>
+            <td colspan="5" class="empty">
+              No hay productos en tu cotización
+            </td>
+          </tr>
+        `;
+
+      }
+
+      carrito.forEach((item, index) => {
+
+        const subtotal = item.precio * item.cantidad;
+
+        total += subtotal;
+        cantidadTotal += item.cantidad;
+
+        quoteBody.innerHTML += `
+          <tr>
+
+            <td class="product-cell">
+
+              <img src="${item.img}"
+                class="table-product-img">
+
+              <div>
+                <b>${item.nombre}</b>
+                <small>${item.categoria}</small>
+              </div>
+
+            </td>
+
+            <td>$${item.precio.toFixed(2)}</td>
+
+            <td>
+
+              <div class="qty-box">
+
+                <button onclick="changeQty(${index}, -1)">
+                  -
+                </button>
+
+                <span>${item.cantidad}</span>
+
+                <button onclick="changeQty(${index}, 1)">
+                  +
+                </button>
+
+              </div>
+
+            </td>
+
+            <td>
+              $${subtotal.toFixed(2)}
+            </td>
+
+            <td>
+
+              <button
+                class="btn btn-danger btn-small"
+                onclick="removeProduct(${index})">
+
+                Eliminar
+
+              </button>
+
+            </td>
+
+          </tr>
+        `;
+      });
+
+      quoteProductos.textContent = carrito.length;
+      quoteCantidad.textContent = cantidadTotal;
+      quoteTotal.textContent = `$${total.toFixed(2)}`;
+
+    }
+
+    function changeQty(index, change) {
+
+      const carrito =
+        JSON.parse(localStorage.getItem("fm_carrito")) || [];
+
+      carrito[index].cantidad += change;
+
+      if (carrito[index].cantidad <= 0) {
+        carrito.splice(index, 1);
+      }
+
+      localStorage.setItem(
+        "fm_carrito",
+        JSON.stringify(carrito)
+      );
+
+      loadQuote();
+
+    }
+
+    function removeProduct(index) {
+
+      const carrito =
+        JSON.parse(localStorage.getItem("fm_carrito")) || [];
+
+      carrito.splice(index, 1);
+
+      localStorage.setItem(
+        "fm_carrito",
+        JSON.stringify(carrito)
+      );
+
+      loadQuote();
+
+      toast("Producto eliminado");
+
+    }
+
+    document
+      .getElementById("submitQuote")
+      .addEventListener("click", () => {
+
+        const user =
+          JSON.parse(localStorage.getItem("fm_session"));
+
+        if (!user) {
+          toast("Debes iniciar sesión");
+          return;
+        }
+
+        const carrito =
+          JSON.parse(localStorage.getItem("fm_carrito")) || [];
+
+        if (carrito.length === 0) {
+          toast("No hay productos");
+          return;
+        }
+
+        const quotes =
+          JSON.parse(localStorage.getItem("fm_quotes")) || [];
+
+        const total = carrito.reduce(
+          (acc, item) =>
+            acc + item.precio * item.cantidad,
+          0
+        );
+
+        quotes.push({
+          id: Date.now(),
+          usuario: user.nombre,
+          correo: user.correo,
+          productos: carrito,
+          notas: document.getElementById("quoteNotas").value,
+          total,
+          estado: "Pendiente",
+          fecha: new Date().toLocaleString("es-MX")
+        });
+
+        localStorage.setItem(
+          "fm_quotes",
+          JSON.stringify(quotes)
+        );
+
+        localStorage.removeItem("fm_carrito");
+
+        loadQuote();
+
+        renderQuotes();
+
+        toast("Cotización enviada");
+
+      });
+
+    function renderQuotes() {
+
+      const user =
+        JSON.parse(localStorage.getItem("fm_session"));
+
+      const quotes =
+        JSON.parse(localStorage.getItem("fm_quotes")) || [];
+
+      const container =
+        document.getElementById("misCotizaciones");
+
+      container.innerHTML = "";
+
+      const myQuotes =
+        quotes.filter(q => q.correo === user?.correo);
+
+      if (myQuotes.length === 0) {
+
+        container.innerHTML = `
+          <div class="card card-pad">
+            No tienes cotizaciones enviadas
+          </div>
+        `;
+
+        return;
+      }
+
+      myQuotes.reverse().forEach(q => {
+
+        container.innerHTML += `
+          <article class="card card-pad quote-card">
+
+            <div class="quote-top">
+
+              <div>
+                <h3>Cotización #${q.id}</h3>
+                <small>${q.fecha}</small>
+              </div>
+
+              <span class="status ${q.estado.toLowerCase()}">
+                ${q.estado}
+              </span>
+
+            </div>
+
+            <div class="quote-products">
+
+              ${q.productos.map(p => `
+                <div class="quote-item">
+
+                  <img src="${p.img}">
+
+                  <div>
+                    <b>${p.nombre}</b>
+                    <small>
+                      ${p.cantidad} x $${p.precio}
+                    </small>
+                  </div>
+
+                </div>
+              `).join("")}
+
+            </div>
+
+            <div class="quote-bottom">
+
+              <div>
+                <small>Total</small>
+                <h3>$${q.total.toFixed(2)}</h3>
+              </div>
+
+            </div>
+
+          </article>
+        `;
+      });
+
+    }
+
+    loadQuote();
+    renderQuotes();
+
+  </script>
+
+</body>
+</html>
