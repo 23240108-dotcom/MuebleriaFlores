@@ -1,230 +1,398 @@
-.quote-layout{
-  align-items:start;
-  gap:30px;
-}
+<!doctype html>
+<html lang="es">
 
-.summary-card{
-  position:sticky;
-  top:100px;
-  border-radius:22px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-  background:#fff;
-}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flores Mobiliario</title>
 
-.summary-item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin:16px 0;
-  padding-bottom:10px;
-  border-bottom:1px solid #eee;
-}
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
 
-.summary-total{
-  margin:24px 0;
-  padding:22px;
-  border-radius:18px;
-  background:linear-gradient(135deg,#f5f0ea,#efe2d3);
-  text-align:center;
-}
+<body>
 
-.summary-total small{
-  display:block;
-  margin-bottom:8px;
-  color:#666;
-}
+  <!-- HEADER -->
+  <header class="topbar">
 
-.summary-total h2{
-  font-size:2rem;
-  color:#7a4b2a;
-}
+    <div class="container nav">
 
-.btn-full{
-  width:100%;
-  margin-top:12px;
-}
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="Logo Flores Mobiliario">
+        <span>Flores Mobiliario</span>
+      </a>
 
-.quote-table{
-  width:100%;
-  border-collapse:collapse;
-  background:#fff;
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 8px 25px rgba(0,0,0,.06);
-}
+      <nav class="links" id="navLinks">
 
-.quote-table thead{
-  background:#7a4b2a;
-  color:#fff;
-}
+        <a href="index.html" class="active">
+          Inicio
+        </a>
 
-.quote-table th,
-.quote-table td{
-  padding:18px;
-  text-align:left;
-}
+        <a href="productos.html">
+          Productos
+        </a>
 
-.quote-table tbody tr{
-  border-bottom:1px solid #eee;
-  transition:.2s;
-}
+        <a href="cotizacion.html" data-user>
+          Cotización
+        </a>
 
-.quote-table tbody tr:hover{
-  background:#faf7f3;
-}
+        <a href="perfil.html" data-user>
+          Mi cuenta
+        </a>
 
-.table-product-img{
-  width:75px;
-  height:75px;
-  object-fit:cover;
-  border-radius:14px;
-  border:2px solid #eee;
-}
+        <a href="admin.html" data-admin>
+          Panel admin
+        </a>
 
-.product-cell{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
+        <a href="contacto.html">
+          Contacto
+        </a>
 
-.product-cell b{
-  display:block;
-  margin-bottom:4px;
-}
+      </nav>
 
-.product-cell small{
-  color:#777;
-}
+      <div class="nav-actions">
 
-.qty-box{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
+        <a class="btn btn-outline btn-small"
+          href="login.html"
+          data-guest>
+          Ingresar
+        </a>
 
-.qty-box button{
-  width:34px;
-  height:34px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  background:#d8c3a5;
-  font-weight:bold;
-  font-size:16px;
-  transition:.2s;
-}
+        <a class="btn btn-primary btn-small"
+          href="registro.html"
+          data-guest>
+          Registrarse
+        </a>
 
-.qty-box button:hover{
-  background:#c5ab87;
-  transform:scale(1.05);
-}
+        <button class="btn btn-outline btn-small"
+          onclick="logout()"
+          data-auth>
+          Salir
+        </button>
 
-.quote-card{
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-  border-radius:20px;
-  box-shadow:0 8px 25px rgba(0,0,0,.06);
-  transition:.25s;
-}
+        <button id="mobileMenu"
+          class="btn btn-small mobile-menu"
+          type="button">
+          ☰
+        </button>
 
-.quote-card:hover{
-  transform:translateY(-3px);
-}
+      </div>
 
-.quote-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
+    </div>
 
-.quote-products{
-  display:grid;
-  gap:12px;
-}
+  </header>
 
-.quote-item{
-  display:flex;
-  gap:12px;
-  align-items:center;
-  padding:10px;
-  border-radius:14px;
-  background:#faf7f3;
-}
+  <!-- HERO -->
+  <section class="hero">
 
-.quote-item img{
-  width:65px;
-  height:65px;
-  object-fit:cover;
-  border-radius:12px;
-}
+    <div class="hero-overlay"></div>
 
-.quote-bottom{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding-top:10px;
-  border-top:1px solid #eee;
-}
+    <div class="container hero-content">
 
-.status{
-  padding:7px 14px;
-  border-radius:30px;
-  font-size:12px;
-  font-weight:700;
-  letter-spacing:.5px;
-}
+      <div class="hero-text">
 
-.status.pendiente{
-  background:#fff3cd;
-  color:#856404;
-}
+        <span class="pill">
+          Muebles profesionales
+        </span>
 
-.status.aceptada{
-  background:#d4edda;
-  color:#155724;
-}
+        <h1>
+          Diseño y mobiliario
+          para oficinas modernas
+        </h1>
 
-.status.rechazada{
-  background:#f8d7da;
-  color:#721c24;
-}
+        <p>
+          Catálogo profesional de muebles para oficina,
+          recepción y espacios comerciales.
+          Genera cotizaciones rápidas y administra productos
+          fácilmente con Flores Mobiliario.
+        </p>
 
-.empty{
-  text-align:center;
-  padding:40px;
-  color:#777;
-  font-size:1rem;
-}
+        <div class="hero-actions">
 
-@media(max-width:900px){
+          <a href="productos.html"
+            class="btn btn-primary">
+            Ver catálogo
+          </a>
 
-  .quote-layout{
-    grid-template-columns:1fr;
-  }
+          <a href="cotizacion.html"
+            class="btn btn-outline"
+            data-user>
+            Mi cotización
+          </a>
 
-  .summary-card{
-    position:relative;
-    top:0;
-  }
+        </div>
 
-  .quote-table{
-    font-size:.9rem;
-  }
+      </div>
 
-  .quote-table th,
-  .quote-table td{
-    padding:12px;
-  }
+      <div class="hero-image">
 
-  .product-cell{
-    flex-direction:column;
-    align-items:flex-start;
-  }
+        <img src="banner.jpg"
+          alt="Muebles de oficina">
 
-  .table-product-img{
-    width:60px;
-    height:60px;
-  }
+      </div>
 
-}
+    </div>
+
+  </section>
+
+  <!-- BENEFICIOS -->
+  <section class="section">
+
+    <div class="container">
+
+      <div class="section-header">
+
+        <div>
+
+          <span class="pill">
+            Servicios
+          </span>
+
+          <h2>
+            ¿Por qué elegir Flores Mobiliario?
+          </h2>
+
+        </div>
+
+      </div>
+
+      <div class="grid grid-3">
+
+        <article class="card card-pad feature-card">
+
+          <div class="feature-icon">
+            🪑
+          </div>
+
+          <h3>
+            Catálogo profesional
+          </h3>
+
+          <p>
+            Muebles modernos para oficinas,
+            recepciones y espacios comerciales.
+          </p>
+
+        </article>
+
+        <article class="card card-pad feature-card">
+
+          <div class="feature-icon">
+            📋
+          </div>
+
+          <h3>
+            Cotizaciones rápidas
+          </h3>
+
+          <p>
+            Agrega productos,
+            revisa subtotales y genera cotizaciones.
+          </p>
+
+        </article>
+
+        <article class="card card-pad feature-card">
+
+          <div class="feature-icon">
+            ⚙️
+          </div>
+
+          <h3>
+            Gestión administrativa
+          </h3>
+
+          <p>
+            Control de productos,
+            inventario y solicitudes de clientes.
+          </p>
+
+        </article>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- PRODUCTOS DESTACADOS -->
+  <section class="section alt-section">
+
+    <div class="container">
+
+      <div class="section-header">
+
+        <div>
+
+          <span class="pill">
+            Catálogo destacado
+          </span>
+
+          <h2>
+            Productos populares
+          </h2>
+
+        </div>
+
+        <a href="productos.html"
+          class="btn btn-outline">
+          Ver todos
+        </a>
+
+      </div>
+
+      <div class="grid grid-3">
+
+        <article class="card product-preview">
+
+          <img src="silla.jpg"
+            alt="Silla">
+
+          <div class="product-preview-content">
+
+            <h3>
+              Sillas ejecutivas
+            </h3>
+
+            <p>
+              Diseño ergonómico y moderno.
+            </p>
+
+          </div>
+
+        </article>
+
+        <article class="card product-preview">
+
+          <img src="escritorio.jpg"
+            alt="Escritorio">
+
+          <div class="product-preview-content">
+
+            <h3>
+              Escritorios
+            </h3>
+
+            <p>
+              Espacios funcionales y elegantes.
+            </p>
+
+          </div>
+
+        </article>
+
+        <article class="card product-preview">
+
+          <img src="recepcion.jpeg"
+            alt="Recepción">
+
+          <div class="product-preview-content">
+
+            <h3>
+              Recepciones
+            </h3>
+
+            <p>
+              Imagen profesional para negocios.
+            </p>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+
+    <div class="container cta-content">
+
+      <div>
+
+        <h2>
+          Genera tu cotización hoy mismo
+        </h2>
+
+        <p>
+          Regístrate para administrar tus muebles,
+          solicitudes y cotizaciones.
+        </p>
+
+      </div>
+
+      <div class="cta-actions">
+
+        <a href="registro.html"
+          class="btn btn-primary">
+          Crear cuenta
+        </a>
+
+        <a href="productos.html"
+          class="btn btn-outline">
+          Explorar productos
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+
+    <div class="container footer-grid">
+
+      <div>
+
+        <h2>
+          Flores Mobiliario
+        </h2>
+
+        <p>
+          Sistema profesional de catálogo,
+          cotizaciones y administración
+          de muebles con LocalStorage.
+        </p>
+
+      </div>
+
+      <div>
+
+        <h3>
+          Cuenta admin
+        </h3>
+
+        <p>
+          admin@flores.com
+          <br>
+          admin123
+        </p>
+
+      </div>
+
+      <div>
+
+        <h3>
+          Navegación
+        </h3>
+
+        <p>
+          Productos · Cotizaciones · Perfil · Admin
+        </p>
+
+      </div>
+
+    </div>
+
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/app.js"></script>
+
+</body>
+</html>
