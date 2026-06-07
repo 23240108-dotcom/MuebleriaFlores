@@ -1,1 +1,230 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Inicio | Flores Mobiliario</title><link rel="stylesheet" href="css/estilos.css"></head><body><header class="topbar"><div class="container nav"><a class="brand" href="index.html"><img src="logo.png" alt="Logo"><span>Flores Mobiliario</span></a><nav class="links"><a href="index.html">Inicio</a><a href="productos.html">Productos</a><a href="cotizacion.html" data-user>Cotización</a><a href="perfil.html" data-user>Mi cuenta</a><a href="admin.html" data-admin>Panel admin</a><a href="contacto.html">Contacto</a></nav><div class="nav-actions"><a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a><a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a><button class="btn btn-outline btn-small" onclick="logout()" data-auth>Salir</button><button id="mobileMenu" class="btn btn-small mobile-menu">☰</button></div></div></header><section class="hero"><div class="container hero-content"><span class="pill">Diseño profesional · Cotizaciones en línea · LocalStorage</span><h1>Mobiliario que eleva tu oficina desde el primer vistazo.</h1><p>Explora productos, arma tu cotización completa, revisa cantidades, elimina artículos y envíala para aprobación del administrador.</p><div class="hero-actions"><a class="btn btn-primary" href="productos.html">Ver catálogo</a><a class="btn btn-outline" style="color:white;border-color:rgba(255,255,255,.45)" href="registro.html">Crear cuenta</a></div><div class="stats"><div class="stat"><b>+6</b><span>Líneas de muebles</span></div><div class="stat"><b>24/7</b><span>Cotización desde navegador</span></div><div class="stat"><b>100%</b><span>Sin base de datos externa</span></div></div></div></section><main><section class="section"><div class="container"><h2 class="section-title">Una experiencia completa para clientes y administración</h2><p class="section-lead">El sistema ahora separa funciones de usuario y administrador, guarda datos en LocalStorage y mantiene coherencia con clientes, productos, cotizaciones y detalle de cotización.</p><div class="grid grid-3" style="margin-top:28px"><div class="card feature"><span class="pill">Usuario</span><h3>Registro e inicio de sesión</h3><p>Guarda nombre, apellidos, correo, teléfono y contraseña. El cliente también puede eliminar su cuenta.</p></div><div class="card feature"><span class="pill">Cotización</span><h3>Productos, cantidades y total</h3><p>El cliente puede agregar productos, modificar cantidades, eliminar artículos y enviar la cotización.</p></div><div class="card feature"><span class="pill">Administrador</span><h3>Gestión completa</h3><p>Administra productos, modifica información, elimina artículos y acepta o elimina cotizaciones.</p></div></div></div></section><section class="section" style="padding-top:0"><div class="container"><h2 class="section-title">Productos destacados</h2><div id="productosGrid" class="grid grid-3"></div></div></section></main><footer class="footer"><div class="container footer-grid"><div><h2>Flores Mobiliario</h2><p>Muebles profesionales para oficinas, recepciones y espacios comerciales. Catálogo, cotizaciones y administración con LocalStorage.</p></div><div><h3>Cuenta admin</h3><p>admin@flores.com<br>admin123</p></div><div><h3>Atención</h3><p>Genera tu cotización, revisa el total y espera la aceptación del administrador.</p></div></div></footer><div id="toast" class="toast"></div><script src="js/app.js"></script></body></html>
+.quote-layout{
+  align-items:start;
+  gap:30px;
+}
+
+.summary-card{
+  position:sticky;
+  top:100px;
+  border-radius:22px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+  background:#fff;
+}
+
+.summary-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:16px 0;
+  padding-bottom:10px;
+  border-bottom:1px solid #eee;
+}
+
+.summary-total{
+  margin:24px 0;
+  padding:22px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#f5f0ea,#efe2d3);
+  text-align:center;
+}
+
+.summary-total small{
+  display:block;
+  margin-bottom:8px;
+  color:#666;
+}
+
+.summary-total h2{
+  font-size:2rem;
+  color:#7a4b2a;
+}
+
+.btn-full{
+  width:100%;
+  margin-top:12px;
+}
+
+.quote-table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 8px 25px rgba(0,0,0,.06);
+}
+
+.quote-table thead{
+  background:#7a4b2a;
+  color:#fff;
+}
+
+.quote-table th,
+.quote-table td{
+  padding:18px;
+  text-align:left;
+}
+
+.quote-table tbody tr{
+  border-bottom:1px solid #eee;
+  transition:.2s;
+}
+
+.quote-table tbody tr:hover{
+  background:#faf7f3;
+}
+
+.table-product-img{
+  width:75px;
+  height:75px;
+  object-fit:cover;
+  border-radius:14px;
+  border:2px solid #eee;
+}
+
+.product-cell{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.product-cell b{
+  display:block;
+  margin-bottom:4px;
+}
+
+.product-cell small{
+  color:#777;
+}
+
+.qty-box{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.qty-box button{
+  width:34px;
+  height:34px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  background:#d8c3a5;
+  font-weight:bold;
+  font-size:16px;
+  transition:.2s;
+}
+
+.qty-box button:hover{
+  background:#c5ab87;
+  transform:scale(1.05);
+}
+
+.quote-card{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  border-radius:20px;
+  box-shadow:0 8px 25px rgba(0,0,0,.06);
+  transition:.25s;
+}
+
+.quote-card:hover{
+  transform:translateY(-3px);
+}
+
+.quote-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.quote-products{
+  display:grid;
+  gap:12px;
+}
+
+.quote-item{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  padding:10px;
+  border-radius:14px;
+  background:#faf7f3;
+}
+
+.quote-item img{
+  width:65px;
+  height:65px;
+  object-fit:cover;
+  border-radius:12px;
+}
+
+.quote-bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-top:10px;
+  border-top:1px solid #eee;
+}
+
+.status{
+  padding:7px 14px;
+  border-radius:30px;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.5px;
+}
+
+.status.pendiente{
+  background:#fff3cd;
+  color:#856404;
+}
+
+.status.aceptada{
+  background:#d4edda;
+  color:#155724;
+}
+
+.status.rechazada{
+  background:#f8d7da;
+  color:#721c24;
+}
+
+.empty{
+  text-align:center;
+  padding:40px;
+  color:#777;
+  font-size:1rem;
+}
+
+@media(max-width:900px){
+
+  .quote-layout{
+    grid-template-columns:1fr;
+  }
+
+  .summary-card{
+    position:relative;
+    top:0;
+  }
+
+  .quote-table{
+    font-size:.9rem;
+  }
+
+  .quote-table th,
+  .quote-table td{
+    padding:12px;
+  }
+
+  .product-cell{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .table-product-img{
+    width:60px;
+    height:60px;
+  }
+
+}
