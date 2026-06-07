@@ -1,4 +1,35 @@
+.full {
+  grid-column: 1 / -1;
+}
 
+.form-actions {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.side button {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  color: inherit;
+}
+
+.side button:hover,
+.side button.active,
+.side a:hover {
+  background: #f2e8dc;
+}
+
+.table-wrap {
+  margin-top: 22px;
+}
 :root{
   --bg:#f7f3ed;--surface:#fffaf4;--card:#ffffff;--text:#2d241d;--muted:#7b6b5f;
   --brand:#8a5a32;--brand-2:#c8955a;--dark:#1f1712;--success:#28784a;--danger:#b23b3b;--warning:#a66a00;
