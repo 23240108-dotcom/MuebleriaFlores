@@ -1,1 +1,300 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Registro | Flores Mobiliario</title><link rel="stylesheet" href="css/estilos.css"></head><body><header class="topbar"><div class="container nav"><a class="brand" href="index.html"><img src="logo.png" alt="Logo"><span>Flores Mobiliario</span></a><nav class="links"><a href="index.html">Inicio</a><a href="productos.html">Productos</a><a href="cotizacion.html" data-user>Cotización</a><a href="perfil.html" data-user>Mi cuenta</a><a href="admin.html" data-admin>Panel admin</a><a href="contacto.html">Contacto</a></nav><div class="nav-actions"><a class="btn btn-outline btn-small" href="login.html" data-guest>Ingresar</a><a class="btn btn-primary btn-small" href="registro.html" data-guest>Registrarse</a><button class="btn btn-outline btn-small" onclick="logout()" data-auth>Salir</button><button id="mobileMenu" class="btn btn-small mobile-menu">☰</button></div></div></header><main class="section"><div class="container grid grid-2"><div><span class="pill">Cuenta de cliente</span><h1 class="section-title">Crea tu cuenta</h1><p class="section-lead">Tus datos se guardarán en LocalStorage para que puedas generar y consultar tus cotizaciones.</p></div><form id="registerForm" class="card card-pad"><div class="form-grid"><div class="form-row"><label>Nombre</label><input name="nombre" class="input" required></div><div class="form-row"><label>Apellidos</label><input name="apellidos" class="input" required></div><div class="form-row"><label>Correo</label><input name="correo" type="email" class="input" required></div><div class="form-row"><label>Teléfono</label><input name="telefono" class="input" required></div><div class="form-row" style="grid-column:1/-1"><label>Contraseña</label><input name="password" type="password" class="input" required minlength="4"></div></div><button class="btn btn-primary" style="margin-top:18px;width:100%">Registrarme</button><p class="mini">¿Ya tienes cuenta? <a href="login.html"><b>Inicia sesión</b></a></p></form></div></main><footer class="footer"><div class="container footer-grid"><div><h2>Flores Mobiliario</h2><p>Muebles profesionales para oficinas, recepciones y espacios comerciales. Catálogo, cotizaciones y administración con LocalStorage.</p></div><div><h3>Cuenta admin</h3><p>admin@flores.com<br>admin123</p></div><div><h3>Atención</h3><p>Genera tu cotización, revisa el total y espera la aceptación del administrador.</p></div></div></footer><div id="toast" class="toast"></div><script src="js/app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Registro | Flores Mobiliario</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+
+  <header class="topbar">
+
+    <div class="container nav">
+
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="Logo Flores Mobiliario">
+        <span>Flores Mobiliario</span>
+      </a>
+
+      <nav class="links" id="navLinks">
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="cotizacion.html" data-user>Cotización</a>
+        <a href="perfil.html" data-user>Mi cuenta</a>
+        <a href="admin.html" data-admin>Panel admin</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+
+      <div class="nav-actions">
+
+        <a class="btn btn-outline btn-small"
+          href="login.html"
+          data-guest>
+          Ingresar
+        </a>
+
+        <a class="btn btn-primary btn-small active"
+          href="registro.html"
+          data-guest>
+          Registrarse
+        </a>
+
+        <button class="btn btn-outline btn-small"
+          onclick="logout()"
+          data-auth>
+          Salir
+        </button>
+
+        <button id="mobileMenu"
+          class="btn btn-small mobile-menu"
+          type="button">
+          ☰
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+  <main class="section">
+
+    <div class="container grid grid-2 register-layout">
+
+      <!-- INFO -->
+      <section>
+
+        <span class="pill">
+          Cuenta de cliente
+        </span>
+
+        <h1 class="section-title">
+          Crea tu cuenta
+        </h1>
+
+        <p class="section-lead">
+          Regístrate para buscar muebles,
+          generar cotizaciones y administrar
+          tu información personal.
+        </p>
+
+        <div class="register-benefits">
+
+          <article class="benefit-card">
+            <h3>Catálogo profesional</h3>
+
+            <p>
+              Explora muebles para oficina,
+              recepción y espacios comerciales.
+            </p>
+          </article>
+
+          <article class="benefit-card">
+            <h3>Cotizaciones rápidas</h3>
+
+            <p>
+              Agrega productos y envía solicitudes
+              directamente al administrador.
+            </p>
+          </article>
+
+          <article class="benefit-card">
+            <h3>Gestión de cuenta</h3>
+
+            <p>
+              Modifica tus datos, consulta historial
+              y elimina tu cuenta cuando lo necesites.
+            </p>
+          </article>
+
+        </div>
+
+      </section>
+
+      <!-- FORMULARIO -->
+      <section>
+
+        <form id="registerForm"
+          class="card card-pad register-card">
+
+          <h2>Registro de cliente</h2>
+
+          <div class="form-grid">
+
+            <div class="form-row">
+              <label>Nombre</label>
+
+              <input
+                name="nombre"
+                class="input"
+                required>
+            </div>
+
+            <div class="form-row">
+              <label>Apellidos</label>
+
+              <input
+                name="apellidos"
+                class="input"
+                required>
+            </div>
+
+            <div class="form-row">
+              <label>Correo electrónico</label>
+
+              <input
+                name="correo"
+                type="email"
+                class="input"
+                required>
+            </div>
+
+            <div class="form-row">
+              <label>Teléfono</label>
+
+              <input
+                name="telefono"
+                class="input"
+                required>
+            </div>
+
+            <div class="form-row full">
+              <label>Contraseña</label>
+
+              <input
+                name="password"
+                type="password"
+                class="input"
+                minlength="4"
+                required>
+            </div>
+
+          </div>
+
+          <button class="btn btn-primary btn-full"
+            style="margin-top:20px">
+            Crear cuenta
+          </button>
+
+          <p class="mini">
+            ¿Ya tienes cuenta?
+            <a href="login.html">
+              <b>Inicia sesión</b>
+            </a>
+          </p>
+
+        </form>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+
+    <div class="container footer-grid">
+
+      <div>
+        <h2>Flores Mobiliario</h2>
+
+        <p>
+          Muebles profesionales para oficinas,
+          recepciones y espacios comerciales.
+        </p>
+      </div>
+
+      <div>
+        <h3>Cuenta admin</h3>
+
+        <p>
+          admin@flores.com
+          <br>
+          admin123
+        </p>
+      </div>
+
+      <div>
+        <h3>Atención</h3>
+
+        <p>
+          Genera tu cotización,
+          revisa el total y espera
+          la respuesta del administrador.
+        </p>
+      </div>
+
+    </div>
+
+  </footer>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/app.js"></script>
+
+  <script>
+
+    const registerForm =
+      document.getElementById("registerForm");
+
+    registerForm.addEventListener("submit", e => {
+
+      e.preventDefault();
+
+      const data =
+        Object.fromEntries(
+          new FormData(registerForm).entries()
+        );
+
+      const users =
+        JSON.parse(localStorage.getItem("fm_users")) || [];
+
+      const exists =
+        users.find(
+          u => u.correo === data.correo
+        );
+
+      if (exists) {
+
+        toast("El correo ya está registrado");
+
+        return;
+      }
+
+      const newUser = {
+        id: Date.now(),
+        nombre: data.nombre,
+        apellidos: data.apellidos,
+        correo: data.correo,
+        telefono: data.telefono,
+        password: data.password,
+        rol: "cliente"
+      };
+
+      users.push(newUser);
+
+      localStorage.setItem(
+        "fm_users",
+        JSON.stringify(users)
+      );
+
+      localStorage.setItem(
+        "fm_session",
+        JSON.stringify(newUser)
+      );
+
+      toast("Cuenta creada correctamente");
+
+      setTimeout(() => {
+        window.location.href = "productos.html";
+      }, 1200);
+
+    });
+
+  </script>
+
+</body>
+</html>
