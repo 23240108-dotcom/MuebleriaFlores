@@ -1941,7 +1941,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     requireRole('admin')
   ){
 
-    adminTab('productos');
+    adminTab('general');
 
   }
 
