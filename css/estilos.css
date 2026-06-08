@@ -1272,3 +1272,10 @@ th{
     width:100%;
   }
 }
+.quote-admin-card{display:flex;flex-direction:column;gap:18px}
+.quote-header{display:flex;justify-content:space-between;gap:20px}
+.quote-price{font-size:1.5rem;font-weight:700}
+.quote-item{display:flex;justify-content:space-between;padding:12px;border:1px solid rgba(0,0,0,.08);border-radius:12px;background:#fafafa}
+.quote-actions{display:flex;gap:10px;flex-wrap:wrap}
+.quote-note{background:#f8fafc;border-radius:12px;padding:14px}
+.full{grid-column:1/-1}
