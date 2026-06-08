@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Editar Cotización | Flores Mobiliario</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="Logo Flores Mobiliario">
+        <span>Flores Mobiliario</span>
+      </a>
+
+      <nav class="links" id="navLinks">
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="admin.html" data-admin>Panel admin</a>
+        <a href="reportes.html" data-admin>Reportes</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn btn-outline btn-small" type="button" onclick="logout()" data-auth>Salir</button>
+        <button id="mobileMenu" class="btn btn-small mobile-menu" type="button">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <span class="pill">CRUD de cotización</span>
+      <h1 class="section-title">Editar cotización del usuario</h1>
+      <p class="section-lead">
+        Modifica productos, cantidades, precios, estado, notas y respuesta administrativa.
+      </p>
+
+      <div id="quoteNotFound" class="card card-pad" style="display:none">
+        <h2>Cotización no encontrada</h2>
+        <p class="section-lead">
+          No se encontró la cotización solicitada o fue eliminada.
+        </p>
+        <a class="btn btn-primary" href="admin.html">Volver al panel</a>
+      </div>
+
+      <form id="editQuoteForm" class="card card-pad" style="display:none">
+        <div class="form-grid">
+          <div class="form-row">
+            <label>ID de cotización</label>
+            <input id="quoteId" class="input" readonly>
+          </div>
+
+          <div class="form-row">
+            <label>Cliente</label>
+            <input id="clienteNombre" class="input" readonly>
+          </div>
+
+          <div class="form-row">
+            <label>Correo</label>
+            <input id="clienteCorreo" class="input" readonly>
+          </div>
+
+          <div class="form-row">
+            <label>Teléfono</label>
+            <input id="clienteTelefono" class="input" readonly>
+          </div>
+
+          <div class="form-row">
+            <label>Estado</label>
+            <select id="quoteEstado" class="input">
+              <option value="enviada">Enviada</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="aceptada">Aceptada</option>
+              <option value="rechazada">Rechazada</option>
+              <option value="cancelada">Cancelada</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label>Fecha</label>
+            <input id="quoteFecha" class="input" readonly>
+          </div>
+
+          <div class="form-row full">
+            <label>Notas del cliente / administrador</label>
+            <textarea id="quoteNotas" class="input" rows="3"></textarea>
+          </div>
+
+          <div class="form-row full">
+            <label>Respuesta del administrador</label>
+            <textarea id="quoteRespuesta" class="input" rows="3" placeholder="Ejemplo: Cotización revisada, precio válido por 7 días."></textarea>
+          </div>
+        </div>
+
+        <hr style="margin:24px 0; border:none; border-top:1px solid rgba(0,0,0,.1)">
+
+        <h2>Productos de la cotización</h2>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="itemsBody"></tbody>
+          </table>
+        </div>
+
+        <div class="card card-pad" style="margin-top:20px">
+          <h3>Agregar producto</h3>
+
+          <div class="form-grid">
+            <div class="form-row">
+              <label>Producto</label>
+              <select id="addProduct" class="input"></select>
+            </div>
+
+            <div class="form-row">
+              <label>Cantidad</label>
+              <input id="addCantidad" class="input" type="number" min="1" value="1">
+            </div>
+          </div>
+
+          <button class="btn btn-outline" type="button" onclick="addItemToQuote()">
+            Agregar producto
+          </button>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-top:24px">
+          <h2>Total: <span id="quoteTotal">$0.00</span></h2>
+
+          <div class="form-actions">
+            <a class="btn btn-outline" href="admin.html">Cancelar</a>
+            <button class="btn btn-danger" type="button" onclick="deleteCurrentQuote()">Eliminar cotización</button>
+            <button class="btn btn-primary" type="submit">Guardar cambios</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/app.js"></script>
+
+  <script>
+    const quoteParams = new URLSearchParams(window.location.search);
+    const currentQuoteId = quoteParams.get("id");
+
+    let editQuotes = [];
+    let editQuote = null;
+    let editProducts = [];
+    let editUsers = [];
+
+    function loadEditQuotePage() {
+      if (!requireRole("admin")) return;
+
+      editQuotes = get(LS.quotes);
+      editProducts = get(LS.products);
+      editUsers = get(LS.users);
+
+      editQuote = editQuotes.find(q => q.id === currentQuoteId);
+
+      if (!editQuote) {
+        document.getElementById("quoteNotFound").style.display = "block";
+        document.getElementById("editQuoteForm").style.display = "none";
+        return;
+      }
+
+      document.getElementById("quoteNotFound").style.display = "none";
+      document.getElementById("editQuoteForm").style.display = "block";
+
+      const user = editUsers.find(u => u.id === editQuote.userId) || {};
+
+      document.getElementById("quoteId").value = editQuote.id;
+      document.getElementById("clienteNombre").value =
+        `${user.nombre || "Usuario"} ${user.apellidos || ""}`.trim();
+      document.getElementById("clienteCorreo").value = user.correo || "";
+      document.getElementById("clienteTelefono").value = user.telefono || "";
+      document.getElementById("quoteEstado").value = editQuote.estado || "enviada";
+      document.getElementById("quoteFecha").value =
+        new Date(editQuote.enviada || editQuote.fecha || Date.now()).toLocaleString("es-MX");
+      document.getElementById("quoteNotas").value = editQuote.notas || "";
+      document.getElementById("quoteRespuesta").value = editQuote.respuesta || "";
+
+      renderAddProductSelect();
+      renderEditItems();
+    }
+
+    function renderAddProductSelect() {
+      const select = document.getElementById("addProduct");
+
+      select.innerHTML = editProducts.map(p => `
+        <option value="${p.id}">
+          ${p.nombre} - ${money(p.precio)} - Stock ${p.stock}
+        </option>
+      `).join("");
+    }
+
+    function renderEditItems() {
+      const tbody = document.getElementById("itemsBody");
+      const calculated = calc(editQuote);
+
+      if (!editQuote.items || editQuote.items.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty">Esta cotización no tiene productos.</div>
+            </td>
+          </tr>
+        `;
+      } else {
+        tbody.innerHTML = calculated.items.map(item => `
+          <tr>
+            <td>
+              <b>${item.producto.nombre || "Producto eliminado"}</b>
+              <div class="mini">
+                ${item.productId} · ${item.producto.categoria || ""}
+              </div>
+            </td>
+
+            <td>
+              <input
+                class="input"
+                type="number"
+                min="0"
+                step="0.01"
+                value="${item.precio}"
+                onchange="updateItemPrice('${item.productId}', this.value)"
+              >
+            </td>
+
+            <td>
+              <input
+                class="input"
+                type="number"
+                min="1"
+                value="${item.cantidad}"
+                onchange="updateItemQty('${item.productId}', this.value)"
+              >
+            </td>
+
+            <td>
+              <b>${money(item.subtotal)}</b>
+            </td>
+
+            <td>
+              <button
+                class="btn btn-danger btn-small"
+                type="button"
+                onclick="removeEditItem('${item.productId}')">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        `).join("");
+      }
+
+      document.getElementById("quoteTotal").textContent = money(calculated.total);
+    }
+
+    function updateItemQty(productId, value) {
+      const item = editQuote.items.find(i => i.productId === productId);
+      if (!item) return;
+
+      item.cantidad = Math.max(1, Number(value) || 1);
+      renderEditItems();
+    }
+
+    function updateItemPrice(productId, value) {
+      const item = editQuote.items.find(i => i.productId === productId);
+      if (!item) return;
+
+      item.precio = Math.max(0, Number(value) || 0);
+      renderEditItems();
+    }
+
+    function removeEditItem(productId) {
+      if (!confirm("¿Eliminar este producto de la cotización?")) return;
+
+      editQuote.items = editQuote.items.filter(i => i.productId !== productId);
+      renderEditItems();
+      toast("Producto eliminado");
+    }
+
+    function addItemToQuote() {
+      const productId = document.getElementById("addProduct").value;
+      const cantidad = Math.max(1, Number(document.getElementById("addCantidad").value) || 1);
+      const product = editProducts.find(p => p.id === productId);
+
+      if (!product) {
+        toast("Selecciona un producto válido", "danger");
+        return;
+      }
+
+      if (!editQuote.items) editQuote.items = [];
+
+      const existing = editQuote.items.find(i => i.productId === productId);
+
+      if (existing) {
+        existing.cantidad += cantidad;
+      } else {
+        editQuote.items.push({
+          productId: product.id,
+          cantidad: cantidad,
+          precio: Number(product.precio || 0)
+        });
+      }
+
+      document.getElementById("addCantidad").value = 1;
+      renderEditItems();
+      toast("Producto agregado", "ok");
+    }
+
+    function saveCurrentQuote(event) {
+      event.preventDefault();
+
+      editQuote.estado = document.getElementById("quoteEstado").value;
+      editQuote.notas = document.getElementById("quoteNotas").value.trim();
+      editQuote.respuesta = document.getElementById("quoteRespuesta").value.trim();
+      editQuote.actualizada = new Date().toISOString();
+
+      editQuotes = editQuotes.map(q => q.id === editQuote.id ? editQuote : q);
+      set(LS.quotes, editQuotes);
+
+      toast("Cotización actualizada correctamente", "ok");
+
+      setTimeout(() => {
+        window.location.href = "admin.html";
+      }, 800);
+    }
+
+    function deleteCurrentQuote() {
+      if (!confirm("¿Eliminar definitivamente esta cotización?")) return;
+
+      editQuotes = editQuotes.filter(q => q.id !== editQuote.id);
+      set(LS.quotes, editQuotes);
+
+      toast("Cotización eliminada", "ok");
+
+      setTimeout(() => {
+        window.location.href = "admin.html";
+      }, 800);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadEditQuotePage();
+      document.getElementById("editQuoteForm").addEventListener("submit", saveCurrentQuote);
+    });
+  </script>
+</body>
+</html>
