@@ -274,15 +274,16 @@
         existing.cantidad += 1;
       } else {
         carrito.push({
-          id: product.id,
-          nombre: product.nombre,
-          categoria: product.categoria,
-          color: product.color,
-          medida: product.medida,
-          precio: Number(product.precio),
-          img: product.img,
-          cantidad: 1
-        });
+  id: product.id,
+  nombre: product.nombre,
+  categoria: product.categoria,
+  color: product.color,
+  medida: product.medida,
+  precio: Number(product.precio),
+  img: product.img,
+  stock: Number(product.stock),
+  cantidad: 1
+});
       }
 
       localStorage.setItem("fm_carrito", JSON.stringify(carrito));
