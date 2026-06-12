@@ -293,33 +293,34 @@
 
     }
 
-    function changeQty(index, change) {
+   function changeQty(index, change) {
 
   const carrito =
     JSON.parse(localStorage.getItem("fm_carrito")) || [];
 
-  const products =
+  const productos =
     JSON.parse(localStorage.getItem("fm_products")) || [];
 
   const item = carrito[index];
 
   if (!item) return;
 
-  const product = products.find(p => p.id === item.id);
+  const producto = productos.find(p => Number(p.id) === Number(item.id));
 
-  if (!product) {
-    toast("Producto no encontrado en inventario");
-    return;
-  }
+  const stockDisponible = producto
+    ? Number(producto.stock)
+    : Number(item.stock || 9999);
 
-  const nuevaCantidad = item.cantidad + change;
+  const nuevaCantidad = Number(item.cantidad) + Number(change);
 
   if (nuevaCantidad <= 0) {
     carrito.splice(index, 1);
-  } else if (nuevaCantidad > product.stock) {
-    toast(`Solo hay ${product.stock} unidades disponibles`);
-    item.cantidad = product.stock;
-  } else {
+  } 
+  else if (nuevaCantidad > stockDisponible) {
+    toast(`Solo hay ${stockDisponible} unidades disponibles`);
+    item.cantidad = stockDisponible;
+  } 
+  else {
     item.cantidad = nuevaCantidad;
   }
 
