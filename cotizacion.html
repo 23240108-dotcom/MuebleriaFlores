@@ -295,23 +295,41 @@
 
     function changeQty(index, change) {
 
-      const carrito =
-        JSON.parse(localStorage.getItem("fm_carrito")) || [];
+  const carrito =
+    JSON.parse(localStorage.getItem("fm_carrito")) || [];
 
-      carrito[index].cantidad += change;
+  const products =
+    JSON.parse(localStorage.getItem("fm_products")) || [];
 
-      if (carrito[index].cantidad <= 0) {
-        carrito.splice(index, 1);
-      }
+  const item = carrito[index];
 
-      localStorage.setItem(
-        "fm_carrito",
-        JSON.stringify(carrito)
-      );
+  if (!item) return;
 
-      loadQuote();
+  const product = products.find(p => p.id === item.id);
 
-    }
+  if (!product) {
+    toast("Producto no encontrado en inventario");
+    return;
+  }
+
+  const nuevaCantidad = item.cantidad + change;
+
+  if (nuevaCantidad <= 0) {
+    carrito.splice(index, 1);
+  } else if (nuevaCantidad > product.stock) {
+    toast(`Solo hay ${product.stock} unidades disponibles`);
+    item.cantidad = product.stock;
+  } else {
+    item.cantidad = nuevaCantidad;
+  }
+
+  localStorage.setItem(
+    "fm_carrito",
+    JSON.stringify(carrito)
+  );
+
+  loadQuote();
+}
 
     function removeProduct(index) {
 
