@@ -733,27 +733,23 @@ function addToQuote(pid){
     get(LS.products)
     .find(x=>x.id===pid);
 
-  if(
-    !p
-    ||
-    p.stock < 1
-  ){
-
-    return toast(
-      'Producto sin stock',
-      'danger'
-    );
-
+  if(!p || Number(p.stock) < 1){
+    return toast('Producto sin stock','danger');
   }
 
   let q = activeQuote();
 
   let it =
-    q.items.find(
-      x=>x.productId===pid
-    );
+    q.items.find(x=>x.productId===pid);
 
   if(it){
+
+    if(Number(it.cantidad) >= Number(p.stock)){
+      return toast(
+        `Solo hay ${p.stock} unidades disponibles`,
+        'danger'
+      );
+    }
 
     it.cantidad++;
 
@@ -767,18 +763,12 @@ function addToQuote(pid){
 
   }
 
-  q.fecha =
-    new Date().toISOString();
+  q.fecha = new Date().toISOString();
 
   saveQuote(q);
 
-  toast(
-    'Producto agregado a tu cotización',
-    'ok'
-  );
-
+  toast('Producto agregado a tu cotización','ok');
 }
-
 function renderQuote(){
 
   if(!qs('#quoteBody')) return;
@@ -826,11 +816,12 @@ function renderQuote(){
             </button>
 
             <input
-              class="input"
-              type="number"
-              min="1"
-              value="${i.cantidad}"
-              onchange="setQty('${i.productId}',this.value)">
+  class="input"
+  type="number"
+  min="1"
+  max="${i.producto.stock || i.cantidad}"
+  value="${i.cantidad}"
+  onchange="setQty('${i.productId}',this.value)">
 
             <button
               class="btn btn-small"
@@ -901,22 +892,34 @@ function changeQty(pid,d){
   let q = activeQuote();
 
   let it =
-    q.items.find(
-      x=>x.productId===pid
-    );
+    q.items.find(x=>x.productId===pid);
 
   if(!it) return;
 
-  it.cantidad =
-    Math.max(
-      1,
-      Number(it.cantidad) + d
-    );
+  let p =
+    get(LS.products)
+    .find(x=>x.id===pid);
+
+  let stock =
+    p ? Number(p.stock) : Number(it.cantidad);
+
+  let nuevaCantidad =
+    Number(it.cantidad) + Number(d);
+
+  if(nuevaCantidad < 1){
+    nuevaCantidad = 1;
+  }
+
+  if(nuevaCantidad > stock){
+    toast(`Solo hay ${stock} unidades disponibles`, 'danger');
+    nuevaCantidad = stock;
+  }
+
+  it.cantidad = nuevaCantidad;
 
   saveQuote(q);
 
   renderQuote();
-
 }
 
 function setQty(pid,v){
@@ -924,22 +927,34 @@ function setQty(pid,v){
   let q = activeQuote();
 
   let it =
-    q.items.find(
-      x=>x.productId===pid
-    );
+    q.items.find(x=>x.productId===pid);
 
   if(!it) return;
 
-  it.cantidad =
-    Math.max(
-      1,
-      Number(v) || 1
-    );
+  let p =
+    get(LS.products)
+    .find(x=>x.id===pid);
+
+  let stock =
+    p ? Number(p.stock) : Number(it.cantidad);
+
+  let cantidad =
+    Number(v) || 1;
+
+  if(cantidad < 1){
+    cantidad = 1;
+  }
+
+  if(cantidad > stock){
+    toast(`Solo hay ${stock} unidades disponibles`, 'danger');
+    cantidad = stock;
+  }
+
+  it.cantidad = cantidad;
 
   saveQuote(q);
 
   renderQuote();
-
 }
 
 function removeItem(pid){
